@@ -6,6 +6,29 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="MealTitle" parent="@android:style/TextAppearance.Material.Large">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MealPriceValue" parent="@android:style/TextAppearance.Material.Large">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MealPriceTitle" parent="@android:style/TextAppearance.Material.Medium">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="NoteTitle" parent="@android:style/TextAppearance.Material.Small">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="NotesValue" parent="@android:style/TextAppearance.Material.Small">
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
 </resources>

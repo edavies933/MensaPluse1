@@ -1,29 +1,28 @@
 package com.example.emmanueldavies.newMensaplus.resipotory
 
-import android.arch.lifecycle.LiveData
 import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.LocationData
 import com.example.emmanueldavies.mensapluse1.data.Meal
+import io.reactivex.Maybe
+import java.util.logging.Logger
 
 import javax.inject.Inject
 
 
-class MensaRepository  @Inject constructor  (var mRemoteDataSource: RemoteDataSource, var mLocalDataSource: LocalDataSource) :
-    IMensaRepository {
+class MensaRepository  @Inject constructor  (var mRemoteDataSource: RemoteDataSource, var mLocalDataSource: LocalDataSource)
+     {
 
-    override val canteenData: LiveData<List<Canteen>>
-        get() = mRemoteDataSource.canteenData
+         val Log = Logger.getLogger(MensaRepository::class.java.name)
 
-    val meals: LiveData<List<Meal>>
-        get() = mRemoteDataSource.meals
 
-    override fun getCanteenDataWithCoordinates(locationData: LocationData) {
+     fun getCanteenDataWithCoordinates(locationData: LocationData): Maybe<List<Canteen>> {
 
-        mRemoteDataSource.getCanteenDataWithCoordinates(locationData)
+       return mRemoteDataSource.getCanteenDataWithCoordinates(locationData)
+
     }
 
-    fun getMealsByCanteenId(canteenId: Int) {
+    fun getMealsByCanteenId(canteenId: Int, date: String) : Maybe<List<Meal>>{
 
-        mRemoteDataSource.queryForMealsByCanteenId(canteenId)
+       return  mRemoteDataSource.queryForMealsByCanteenId(canteenId,date)
     }
 }

@@ -1,14 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+                name="MensaViewModel1"
+                type="com.example.emmanueldavies.mensapluse1.ui.MensaViewModel"/>
+    </data>
+
+
+<android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.MainActivity">
+
+<android.support.constraint.ConstraintLayout
              tools:ignore="MergeRootFrame"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
 
-    <fragment class="com.example.emmanueldavies.mensapluse1.ui.MenuListFragment"
-        android:id="@+id/sample"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</FrameLayout>
+    <android.support.v7.widget.Toolbar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:theme="?attr/actionBarTheme"
+            android:minHeight="?attr/actionBarSize"
+            android:id="@+id/toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            style="@android:style/Widget.Material.Light.Spinner"/>
+
+
+    </android.support.v7.widget.Toolbar>
+    <android.support.design.widget.TabLayout
+            android:layout_width="395dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+    app:layout_constraintTop_toBottomOf="@+id/toolbar" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:id="@+id/tabLayout">
+
+
+    </android.support.design.widget.TabLayout>
+    <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+
+            android:layout_width="match_parent"
+            android:layout_height="505dp"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
+
+    >
+
+    <!--<FrameLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="0dp"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/toolbar" app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent">-->
+
+
+     <!---->
+    <!---->
+        <!--<android.support.v4.view.ViewPager-->
+                <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:id="@+id/pager"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent" >-->
+        <!--</android.support.v4.view.ViewPager>-->
+
+
+        <!--&lt;!&ndash;<fragment class="com.example.emmanueldavies.mensapluse1.ui.MenuListFragment"&ndash;&gt;-->
+                  <!--&lt;!&ndash;android:id="@+id/sample"&ndash;&gt;-->
+                  <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                  <!--&lt;!&ndash;android:layout_height="match_parent"/>&ndash;&gt;-->
+
+
+
+
+    <!--</FrameLayout>-->
+</android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/drawer_view"
+            app:headerLayout="@layout/nav_header"
+            android:fitsSystemWindows="true"/>
+
+</android.support.v4.widget.DrawerLayout>
+
+</layout>

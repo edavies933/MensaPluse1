@@ -6,6 +6,5 @@ import com.example.emmanueldavies.mensapluse1.data.Canteen
 class LocalDataSource :
     IDataSource<List<Canteen>> {
 
-    override val canteenData: LiveData<List<Canteen>>
-        get() = canteenData
+
 }
