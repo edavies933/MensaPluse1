@@ -4,6 +4,7 @@ import android.arch.persistence.room.*
 import com.example.emmanueldavies.mensapluse1.data.Meal
 import io.reactivex.Maybe
 
+@Dao
 interface  MealDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -16,10 +17,8 @@ interface  MealDao {
     fun delete (meal: Meal)
 
     @Query("SELECT * FROM meal_table")
-    fun getAllMeals(meal: Meal) : Maybe<Meal>
+    fun getAllMeals(): Maybe<Meal>
 
-    @Insert
-    fun insertAll(users: List<Meal>)
 
 
 }

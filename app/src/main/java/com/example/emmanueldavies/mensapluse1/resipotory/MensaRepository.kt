@@ -23,6 +23,16 @@ class MensaRepository  @Inject constructor  (var mRemoteDataSource: RemoteDataSo
 
     fun getMealsByCanteenId(canteenId: Int, date: String) : Maybe<List<Meal>>{
 
+    var meals =     mLocalDataSource.getAllMealsFromDb().subscribe(
+        {var meals = it
+
+        },
+        {
+            var errror = it.localizedMessage
+        }
+    )
+
+
        return  mRemoteDataSource.queryForMealsByCanteenId(canteenId,date)
     }
 }

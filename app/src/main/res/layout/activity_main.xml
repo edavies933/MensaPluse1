@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="MensaViewModel1"
-                type="com.example.emmanueldavies.mensapluse1.ui.MensaViewModel"/>
+                type="com.MensaViewModel"/>
     </data>
 
 
@@ -14,7 +14,7 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.MainActivity">
+        tools:context="com.MainActivity">
 
 <android.support.constraint.ConstraintLayout
              tools:ignore="MergeRootFrame"
@@ -82,7 +82,7 @@
         <!--</android.support.v4.view.ViewPager>-->
 
 
-        <!--&lt;!&ndash;<fragment class="com.example.emmanueldavies.mensapluse1.ui.MenuListFragment"&ndash;&gt;-->
+        <!--&lt;!&ndash;<fragment class="com.MenuListFragment"&ndash;&gt;-->
                   <!--&lt;!&ndash;android:id="@+id/sample"&ndash;&gt;-->
                   <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
                   <!--&lt;!&ndash;android:layout_height="match_parent"/>&ndash;&gt;-->

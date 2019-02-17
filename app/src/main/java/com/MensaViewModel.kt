@@ -1,8 +1,7 @@
-package com.example.emmanueldavies.mensapluse1.ui
+package com
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.example.emmanueldavies.mensapluse1.adapter.MealAdapter
 import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.LocationData
 import com.example.emmanueldavies.mensapluse1.data.Meal

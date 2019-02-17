@@ -1,6 +1,5 @@
-package com.example.emmanueldavies.mensapluse1.ui
+package com
 
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.net.Uri

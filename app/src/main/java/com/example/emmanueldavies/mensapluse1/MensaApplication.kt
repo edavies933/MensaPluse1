@@ -3,7 +3,6 @@ package com.example.emmanueldavies.mensapluse1
 import android.app.Activity
 import android.app.Application
 import com.example.emmanueldavies.mensapluse1.di.AppInjector
-import com.example.emmanueldavies.mensapluse1.di.component.DaggerAppComponentxx
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector

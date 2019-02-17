@@ -1,6 +1,6 @@
 package com.example.emmanueldavies.mensapluse1.data
-
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
@@ -19,17 +19,24 @@ data class Meal(
     var category: String? = null,
     @SerializedName("prices")
     @Expose
+    @Ignore
     var prices: Prices?,
+
+    @PrimaryKey(autoGenerate = true)
+    var mealPrimaryKey: Int,
 
     @SerializedName("notes")
     @Expose
+    @Ignore
     var notes: List<String>? = null,
-
-    @PrimaryKey(autoGenerate = true)
-    private var meal_id: Long = 0,
-
+    @Ignore
     var date: Date
-)
+
+
+){
+    constructor():this(null,"",null,null,0,null,
+        Date())
+}
 
 
 

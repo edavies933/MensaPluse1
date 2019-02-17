@@ -1,8 +1,11 @@
 package com.example.emmanueldavies.mensapluse1.di.modules
 
-import android.content.Context
+import android.app.Application
+import android.arch.persistence.room.Room
+import android.arch.persistence.room.RoomDatabase
 import com.example.emmanueldavies.mensapluse1.api.MensaAPIInterface
-import com.example.emmanueldavies.mensapluse1.data.Person
+import com.example.emmanueldavies.mensapluse1.rooom.MealDao
+import com.example.emmanueldavies.mensapluse1.rooom.MealDatabase
 import com.example.emmanueldavies.newMensaplus.resipotory.LocalDataSource
 import com.example.emmanueldavies.newMensaplus.resipotory.MensaRepository
 import com.example.emmanueldavies.newMensaplus.resipotory.RemoteDataSource
@@ -16,12 +19,6 @@ import javax.inject.Singleton
 
 @Module(includes = [ViewModelModule::class])
 class AppModule {
-
-    @Provides
-    @Singleton
-    fun provideApplication(): Person =
-        Person("emmanuel", 25)
-
 
     @Singleton
     @Provides
@@ -46,9 +43,9 @@ class AppModule {
 
     @Provides
     @Reusable
-    internal fun providesLocalDataSource(): LocalDataSource {
+    internal fun providesLocalDataSource(mealDao: MealDao): LocalDataSource {
 
-        return LocalDataSource()
+        return LocalDataSource(mealDao)
     }
 
     @Provides
@@ -56,6 +53,23 @@ class AppModule {
     internal fun provideRemoteDataSource(apiInterface: MensaAPIInterface): RemoteDataSource {
 
         return RemoteDataSource(apiInterface)
+    }
+
+
+    @Provides
+    @Singleton
+    fun providesMealDataBase(application: Application):MealDatabase{
+
+        var mealDataBase = Room.databaseBuilder(application,MealDatabase::class.java,
+            "meal_database.db").build()
+        return  mealDataBase
+    }
+
+    @Provides
+    @Singleton
+    fun providesMealDao (mealDatabase: MealDatabase) : MealDao {
+
+        return  mealDatabase.mealDatabaseDao()
     }
 }
 

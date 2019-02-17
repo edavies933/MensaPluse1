@@ -1,12 +1,10 @@
-package com.example.emmanueldavies.mensapluse1.ui
+package com
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.database.DataSetObserver
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBar
@@ -18,7 +16,6 @@ import javax.inject.Inject
 import android.support.v4.view.ViewPager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -27,7 +24,8 @@ import com.example.emmanueldavies.mensapluse1.R
 import com.example.emmanueldavies.mensapluse1.data.LocationData
 
 
-class MainActivity : AppCompatActivity(), HasSupportFragmentInjector, MenuListFragment.OnFragmentInteractionListener , AdapterView.OnItemSelectedListener {
+class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
+    MenuListFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener {
     private var canteemNames: MutableList<String> = mutableListOf()
     @Inject
     lateinit var mensaAppViewModelFactory: MensaAppViewModelFactory
@@ -81,7 +79,8 @@ lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
         for (i in 0 until 7)
         {
             var formattedDate  =  mensaViewModel.getFormatedTitleDate(i)
-            adapter.addFragment(MenuListFragment.newInstance(mensaViewModel.getFormatedDayName(i)),
+            adapter.addFragment(
+                MenuListFragment.newInstance(mensaViewModel.getFormatedDayName(i)),
                 formattedDate.substring(0,formattedDate.length - 5))
         }
         viewPager.adapter = adapter

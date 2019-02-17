@@ -23,5 +23,7 @@ interface AppComponentxx {
     }
 
         fun inject(app: MensaApplication)
+
+
     }
 
