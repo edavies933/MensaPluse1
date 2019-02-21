@@ -10,32 +10,34 @@ import java.util.*
 data class Meal(
     @SerializedName("id")
     @Expose
-    var id: Int? = null,
+    var id: Int?,
     @SerializedName("name")
     @Expose
-    var name: String? = null,
+    var name: String? ,
     @SerializedName("category")
     @Expose
-    var category: String? = null,
+    var category: String? ,
+    var canteenId: Int,
+
     @SerializedName("prices")
     @Expose
     @Ignore
     var prices: Prices?,
 
     @PrimaryKey(autoGenerate = true)
-    var mealPrimaryKey: Int,
+    var mealPrimaryKey: Int? ,
 
     @SerializedName("notes")
     @Expose
     @Ignore
-    var notes: List<String>? = null,
-    @Ignore
-    var date: Date
+    var notes: List<String>? ,
 
+    var date: String
 
 ){
-    constructor():this(null,"",null,null,0,null,
-        Date())
+
+    constructor() : this(0,"","",0,null,null,null,"")
+
 }
 
 
