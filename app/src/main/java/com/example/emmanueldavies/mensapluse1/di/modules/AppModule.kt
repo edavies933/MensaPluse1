@@ -6,9 +6,7 @@ import android.arch.persistence.room.RoomDatabase
 import com.example.emmanueldavies.mensapluse1.api.MensaAPIInterface
 import com.example.emmanueldavies.mensapluse1.rooom.MealDao
 import com.example.emmanueldavies.mensapluse1.rooom.MealDatabase
-import com.example.emmanueldavies.newMensaplus.resipotory.LocalDataSource
-import com.example.emmanueldavies.newMensaplus.resipotory.MensaRepository
-import com.example.emmanueldavies.newMensaplus.resipotory.RemoteDataSource
+import com.example.emmanueldavies.newMensaplus.resipotory.*
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -35,22 +33,21 @@ class AppModule {
 
     @Provides
     @Reusable
-    internal fun getMensaRepository(
-        localDataSource: LocalDataSource, remoteDataSource: RemoteDataSource
+    internal fun getMensaRepository(localDataSource: ILocalDataSource, remoteDataSource: IRemoteDataSource
     ): MensaRepository {
         return MensaRepository(remoteDataSource, localDataSource)
     }
 
     @Provides
     @Reusable
-    internal fun providesLocalDataSource(mealDao: MealDao): LocalDataSource {
+    internal fun providesLocalDataSource(mealDao: MealDao): ILocalDataSource {
 
         return LocalDataSource(mealDao)
     }
 
     @Provides
     @Reusable
-    internal fun provideRemoteDataSource(apiInterface: MensaAPIInterface): RemoteDataSource {
+    internal fun provideRemoteDataSource(apiInterface: MensaAPIInterface): IRemoteDataSource {
 
         return RemoteDataSource(apiInterface)
     }
@@ -71,6 +68,26 @@ class AppModule {
 
         return  mealDatabase.mealDatabaseDao()
     }
+
+
+//    @Provides
+//    @Singleton
+//    fun providesCanteenDataBase(application: Application):CanteenDatabase{
+//
+//        var canteenDatabase = Room.databaseBuilder(application,CanteenDatabase::class.java,
+//            "canteen_database.db").build()
+//        return  canteenDatabase
+//    }
+//
+//    @Provides
+//    @Singleton
+//    fun providesCanteenDao (canteenDatabase: CanteenDatabase) : CanteenDao {
+//
+//        return  canteenDatabase.canteenDatabaseDao()
+//    }
+
+
+
 }
 
 

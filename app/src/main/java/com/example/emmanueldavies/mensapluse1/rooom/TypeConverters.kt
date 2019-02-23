@@ -1,25 +1,49 @@
 package com.example.emmanueldavies.mensapluse1.rooom
 
-import android.annotation.TargetApi
 import android.arch.persistence.room.TypeConverter
-import android.os.Build
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
+import com.example.emmanueldavies.mensapluse1.data.Prices
 
 class DateTypeConverter {
 
-    @TargetApi(Build.VERSION_CODES.O)
     @TypeConverter
-    fun fromTimestamp(value: String): LocalDate? {
-        val string = "January 2, 2010"
-        val formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH)
-        val localDate = LocalDate.parse(string, formatter)
-        return  localDate
+    fun notesToStringConverter(notes: List<String>): String {
+        var result = ""
+        for ((index, note) in notes.withIndex()) {
+
+            result = if (index == 0) {
+                "$note"
+            } else {
+                "$result, $note"
+
+            }
+
+        }
+        return result
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: LocalDate): String? {
-        return date.toString()
+    fun stringToNoteConverter(string: String): List<String> {
+        var noteList = string.replace(" ", "").split(",")
+        return noteList
+    }
+
+    @TypeConverter
+    fun stringToPricesConvert(string: String): Prices {
+
+        var valueList = string.replace("Student:", "").replace("Employee:", "")
+            .replace("Others:", "")
+
+        valueList = valueList.
+                replace(" ", "")
+
+       var splitedList = valueList.     split("€,")
+
+       return  Prices(splitedList[0], splitedList[1],others =  splitedList[2].replace("€",""))
+    }
+
+    @TypeConverter
+    fun pricesToStringConverter(prices: Prices): String {
+
+        return "Student: ${prices.students}€, Employee: ${prices.employees}€, Others: ${prices.others}€"
     }
 }

@@ -1,4 +1,4 @@
-package com
+package com.example.emmanueldavies.mensapluse1.ui
 
 import android.content.Context
 import android.databinding.DataBindingUtil

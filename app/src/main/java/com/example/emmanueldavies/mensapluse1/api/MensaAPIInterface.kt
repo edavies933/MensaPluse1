@@ -25,4 +25,5 @@ public interface MensaAPIInterface {
 }
 
 
+// http://openmensa.org/api/v2/canteens?near[lat]=50.9787&near[lng]=11.03283
 

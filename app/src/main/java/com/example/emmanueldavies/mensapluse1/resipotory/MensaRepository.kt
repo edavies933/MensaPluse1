@@ -4,36 +4,37 @@ import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.LocationData
 import com.example.emmanueldavies.mensapluse1.data.Meal
 import io.reactivex.Maybe
-import java.util.*
-import java.util.logging.Logger
-
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
-class MensaRepository  @Inject constructor  (var mRemoteDataSource: RemoteDataSource, var mLocalDataSource: LocalDataSource)
-     {
+class MensaRepository @Inject constructor(
+    private var mRemoteDataSource: IRemoteDataSource,
+    private var mLocalDataSource: ILocalDataSource
+) {
+    fun getCanteenDataWithCoordinates(locationData: LocationData): Maybe<List<Canteen>> {
+        return mRemoteDataSource.getCanteenDataWithCoordinates(locationData).onErrorComplete()//Todo Check if there is internet or not
+    }
 
-         val Log = Logger.getLogger(MensaRepository::class.java.name)
+    fun getMealsByCanteenId(canteenId: Int, date: String): Maybe<List<Meal>> {
+        return Maybe.concat(mLocalDataSource.queryForMealsByCanteenId(canteenId, date).subscribeOn(Schedulers.io()),
+            mRemoteDataSource.queryForMealsByCanteenId(canteenId, date).doOnSuccess {
+                addCanteenIdToMeals(it, canteenId, date)
+                mLocalDataSource.saveMealsToDataBase(it)
+            }).filter { !it.isEmpty() }
 
-
-     fun getCanteenDataWithCoordinates(locationData: LocationData): Maybe<List<Canteen>> {
-
-       return mRemoteDataSource.getCanteenDataWithCoordinates(locationData)
+            .firstElement()
 
     }
 
-    fun getMealsByCanteenId(canteenId: Int, date: String) : Maybe<List<Meal>>{
-
-    var meals =     mLocalDataSource.getMealFromDb(canteenId, date).subscribe(
-        {var meals = it
-
-        },
-        {
-            var errror = it.localizedMessage
+   private fun addCanteenIdToMeals(
+        it: List<Meal>,
+        canteenId: Int,
+        date: String
+    ) {
+        for (meal in it) {
+            meal.canteenId = canteenId
+            meal.date = date
         }
-    )
-
-
-       return  mRemoteDataSource.queryForMealsByCanteenId(canteenId,date)
     }
 }

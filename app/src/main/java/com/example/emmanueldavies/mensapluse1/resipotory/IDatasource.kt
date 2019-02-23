@@ -3,19 +3,22 @@ package com.example.emmanueldavies.newMensaplus.resipotory
 import android.arch.lifecycle.LiveData
 import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.LocationData
+import com.example.emmanueldavies.mensapluse1.data.Meal
 import io.reactivex.Maybe
 
 
-interface IDataSource<T> {
+interface ILocalDataSource {
 
-
+    fun  queryForMealsByCanteenId (canteenId :Int, date:String) : Maybe<List<Meal>>
+    fun saveMealsToDataBase(meals: List<Meal>)
 }
 
 
-interface IMensaRepository {
+interface IRemoteDataSource {
 
-    val canteenData: LiveData<List<Canteen>>
+    fun  queryForMealsByCanteenId (canteenId :Int, date:String) : Maybe<List<Meal>>
     fun getCanteenDataWithCoordinates(locationData: LocationData) : Maybe<List<Canteen>>
 }
+
 
 

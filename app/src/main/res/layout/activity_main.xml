@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="MensaViewModel1"
-                type="com.MensaViewModel"/>
+                type="com.example.emmanueldavies.mensapluse1.ui.MensaViewModel"/>
     </data>
 
 
@@ -14,7 +14,7 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.MainActivity">
+        tools:context=".ui.MainActivity">
 
 <android.support.constraint.ConstraintLayout
              tools:ignore="MergeRootFrame"
@@ -56,41 +56,15 @@
             android:id="@+id/viewpager"
 
             android:layout_width="match_parent"
-            android:layout_height="505dp"
+            android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@+id/tabLayout" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_bias="0.216" android:layout_marginTop="8dp"/>
 
     >
 
-    <!--<FrameLayout-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="0dp"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/toolbar" app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent">-->
-
-
-     <!---->
-    <!---->
-        <!--<android.support.v4.view.ViewPager-->
-                <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-                <!--android:id="@+id/pager"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent" >-->
-        <!--</android.support.v4.view.ViewPager>-->
-
-
-        <!--&lt;!&ndash;<fragment class="com.MenuListFragment"&ndash;&gt;-->
-                  <!--&lt;!&ndash;android:id="@+id/sample"&ndash;&gt;-->
-                  <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-                  <!--&lt;!&ndash;android:layout_height="match_parent"/>&ndash;&gt;-->
-
-
-
-
-    <!--</FrameLayout>-->
 </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.NavigationView

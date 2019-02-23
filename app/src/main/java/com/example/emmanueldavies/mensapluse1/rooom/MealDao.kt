@@ -1,6 +1,7 @@
 package com.example.emmanueldavies.mensapluse1.rooom
 
 import android.arch.persistence.room.*
+import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.Meal
 import io.reactivex.Maybe
 import java.time.LocalDate
@@ -29,3 +30,27 @@ interface  MealDao {
 
 
 }
+
+//@Dao
+//interface  CanteenDao {
+//
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    fun insert(canteen: Canteen)
+//
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    fun insertListOfMeal(canteen: List<Canteen>)
+//
+//    @Update
+//    fun update(canteen: Canteen)
+//
+//    @Delete
+//    fun delete (canteen: Canteen)
+//
+//    @Query("SELECT * FROM canteen_table WHERE Id = :canteenId ")
+//    fun getCanteenWithCanteenId(canteenId: Int): Maybe<List<Canteen>>
+//
+//    @Query("SELECT * FROM canteen_table")
+//    fun getAllCanteens () : Maybe<List<Canteen>>
+//
+//
+//}

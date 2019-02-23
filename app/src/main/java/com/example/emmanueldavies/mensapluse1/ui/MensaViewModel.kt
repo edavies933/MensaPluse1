@@ -1,4 +1,4 @@
-package com
+package com.example.emmanueldavies.mensapluse1.ui
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -18,11 +18,12 @@ class MensaViewModel @Inject constructor(val repository: MensaRepository) : View
 
     var canteenNames: MutableLiveData<MutableList<String>> = MutableLiveData()
     var canteens: MutableLiveData<List<Canteen>> = MutableLiveData()
-     var mealAdapter: MealAdapter = MealAdapter(mutableListOf())
+    var mealAdapter: MealAdapter =
+        MealAdapter(mutableListOf())
     private lateinit var canteen: Canteen
     private var calendar: Calendar = Calendar.getInstance()
 
-    val Log = Logger.getLogger(MensaViewModel::class.java.name)
+    private val log = Logger.getLogger(MensaViewModel::class.java.name)
 
     fun getCanteenNames(locationData: LocationData) {
 
@@ -30,65 +31,45 @@ class MensaViewModel @Inject constructor(val repository: MensaRepository) : View
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess {
-                Log.info("on do Success for canteen call " + it.toString())
+                log.info("on do Success for canteen call " + it.toString())
 
-                canteens.postValue(it)
+                this.canteens.postValue(it)
                 for (x in it) {
-                    Log.info("this are the canteens " + x.toString())
+                    log.info("this are the canteens " + x.toString())
 
                 }
             }
             .map {
 
-                Log.info("on do map for canteen call " + it.toString())
+                log.info("on do map for canteen call " + it.toString())
 
-                var xx: MutableList<String> = mutableListOf()
+                var listOfCanteenNames: MutableList<String> = mutableListOf()
 
                 for (item in it) {
-
-                    xx.add(item.name!!)
+                    listOfCanteenNames.add(item.name!!)
                 }
-                xx
-
+                listOfCanteenNames
             }
-
-
             .subscribe {
-                Log.info("observerble on subcribed for canteen name" + it.toString())
+                log.info("observable on subscribed for canteen name$it")
                 canteenNames.postValue(it)
             }
     }
 
     fun getMeals(canteenName: String) {
-
-
-        var ChoosenCanteen = this.canteens.value!!.single { canteen -> canteen.name.equals(canteenName) }
-        canteen = ChoosenCanteen
-        Log.info("selected Canteen is " + canteen.toString())
-
+        0
+        canteen = this.canteens.value!!.single { canteen -> canteen.name.equals(canteenName) }
+        log.info("selected Canteen is $canteen")
         getMealAtThisDay(canteen, calendar.time.toString())
     }
 
 
     private fun FormatMeals(it: List<Meal>) {
-//        for (meal in it) if (meal.prices?.students == null) {
-//            meal.prices?.students = meal.prices?.students ?: "--"
-//            meal.prices?.students.plus("€")
-//
-//            meal.prices?.employees = meal.prices?.employees ?: "--"
-//            meal.prices?.employees.plus("€")
-//
-//            meal.prices?.others = meal.prices?.others ?: "--"
-//            meal.prices?.others.plus("€")
-//
-//
-//        }
-
         mealAdapter.listOfMeals = it.toMutableList()
         mealAdapter.notifyDataSetChanged()
     }
 
-    fun getMealAtThisDay(canteen: Canteen, date: String) {
+    private fun getMealAtThisDay(canteen: Canteen, date: String) {
 
         repository.getMealsByCanteenId(canteen?.id!!, date)
             .observeOn(AndroidSchedulers.mainThread())
@@ -96,46 +77,34 @@ class MensaViewModel @Inject constructor(val repository: MensaRepository) : View
                 var x = it
                 FormatMeals(it)
                 for (x in it) {
-                    Log.info("on do Success for meal call " + x.toString())
-
+                    log.info("on do Success for meal call " + x.toString())
                 }
 
             }
-            .subscribe({
-                Log.info("on onsubscribed for meal call " + it.toString())
+            .subscribe({},
+                {
+                    var x = it
 
-
-            }, {
-                var x = it
-
-            })
+                })
     }
 
 
-    fun getMealAtAcertainDateInFuture(daysLater: String) {
-
-
+    fun getMealAtACertainDateInFuture(daysLater: String) {
         mealAdapter.notifyDataSetChanged()
-//        calendar.add(Calendar.DAY_OF_MONTH,daysLater)
-        var calender1: Calendar = Calendar.getInstance()
-//        calender1.add(Calendar.DAY_OF_MONTH, daysLater)
         getMealAtThisDay(canteen, daysLater)
-//        calender1.add(Calendar.DAY_OF_MONTH, -daysLater)
     }
 
     fun getFormatedTitleDate(daysLater: Int): String {
         var calendar: Calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_MONTH, daysLater)
         var sdf = SimpleDateFormat("E dd-MM-yyyy")
-
         return sdf.format(calendar.time)
     }
 
-    fun getFormatedDayName (daysLater: Int): String{
-
-        when(daysLater){
-            0 -> return  "Today"
-            1 -> return  "Tomorrow"
+    fun getFormattedDayName(daysLater: Int): String {
+        when (daysLater) {
+            0 -> return "Today"
+            1 -> return "Tomorrow"
         }
         var calendar: Calendar = Calendar.getInstance()
         calendar.add(Calendar.DAY_OF_MONTH, daysLater)

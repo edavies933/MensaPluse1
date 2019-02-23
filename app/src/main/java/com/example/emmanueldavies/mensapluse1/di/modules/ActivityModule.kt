@@ -1,7 +1,7 @@
 package com.example.emmanueldavies.mensapluse1.di.modules
 
 import com.example.emmanueldavies.mensapluse1.di.FragmentBuildersModule
-import com.MainActivity
+import com.example.emmanueldavies.mensapluse1.ui.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -1,4 +1,4 @@
-package com
+package com.example.emmanueldavies.mensapluse1.ui
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -80,7 +80,7 @@ lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
         {
             var formattedDate  =  mensaViewModel.getFormatedTitleDate(i)
             adapter.addFragment(
-                MenuListFragment.newInstance(mensaViewModel.getFormatedDayName(i)),
+                MenuListFragment.newInstance(mensaViewModel.getFormattedDayName(i)),
                 formattedDate.substring(0,formattedDate.length - 5))
         }
         viewPager.adapter = adapter
@@ -91,7 +91,7 @@ lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
             override fun onPageSelected(p0: Int) {
                 mensaViewModel.mealAdapter.listOfMeals.clear()
                 var formattedDate  =  mensaViewModel.getFormatedTitleDate(p0)
-              mensaViewModel.getMealAtAcertainDateInFuture(formattedDate!!)
+              mensaViewModel.getMealAtACertainDateInFuture(formattedDate!!)
 
             }
 

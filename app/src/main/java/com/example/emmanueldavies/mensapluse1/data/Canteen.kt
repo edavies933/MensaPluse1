@@ -1,24 +1,33 @@
 package com.example.emmanueldavies.mensapluse1.data
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
+import android.arch.persistence.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class Canteen {
+@Entity(tableName = "canteen_table")
+class Canteen(
 
+
+    @PrimaryKey(autoGenerate = true)
+    var canteenPrimaryKey: Int?,
     @SerializedName("id")
     @Expose
-    var id: Int? = null
+    var id: Int?,
     @SerializedName("name")
     @Expose
-    var name: String? = null
+    var name: String?,
     @SerializedName("city")
     @Expose
-    var city: String? = null
+    var city: String?,
     @SerializedName("address")
     @Expose
-    var address: String? = null
+    @Ignore
+    var address: String?,
     @SerializedName("coordinates")
     @Expose
-    var coordinates: List<Double>? = null
+    @Ignore
+    var coordinates: List<Double>?
 
-}
+)

@@ -1,6 +1,6 @@
 package com.example.emmanueldavies.mensapluse1.di
 
-import com.MenuListFragment
+import com.example.emmanueldavies.mensapluse1.ui.MenuListFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
