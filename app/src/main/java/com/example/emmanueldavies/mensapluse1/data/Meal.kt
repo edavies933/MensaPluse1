@@ -20,7 +20,6 @@ data class Meal(
 
     @SerializedName("prices")
     @Expose
-    @Ignore
     var prices: Prices?,
 
     @PrimaryKey(autoGenerate = true)
@@ -28,7 +27,6 @@ data class Meal(
 
     @SerializedName("notes")
     @Expose
-    @Ignore
     var notes: List<String>? ,
 
     var date: String

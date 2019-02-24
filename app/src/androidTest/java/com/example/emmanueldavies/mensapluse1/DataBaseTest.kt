@@ -2,9 +2,10 @@ package com.example.emmanueldavies.mensapluse1
 
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
+import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.Meal
 import com.example.emmanueldavies.mensapluse1.data.Prices
-import com.example.emmanueldavies.mensapluse1.rooom.MealDatabase
+import com.example.emmanueldavies.mensapluse1.rooom.MensaDatabase
 import io.reactivex.internal.operators.maybe.MaybeObserveOn
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -15,10 +16,11 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 open class MealDaoTest {
-    private lateinit var mealDaoDatabase: MealDatabase
+    private lateinit var mensaDaoDatabase: MensaDatabase
     private lateinit var meal: Meal
     private lateinit var observer: MaybeObserveOn<in Meal>
-    lateinit var mealList : List<Meal>
+    lateinit var mealList: List<Meal>
+    lateinit var canteenList: List<Canteen>
     @Before
     fun initDb() {
 
@@ -31,38 +33,130 @@ open class MealDaoTest {
 
         var note: List<String> = listOf("sugar", "milk", "coffee")
 
-         mealList = listOf<Meal>(
+        mealList = listOf<Meal>(
 
-            Meal(name = "meal 1a", canteenId = 1, date = "01.01.2019", prices = prices, notes = note,category = "",id = 0,mealPrimaryKey = null),
-            Meal(name = "meal 1b", canteenId = 1, date = "01.01.2019", prices = prices, notes = note,category = "",id = 0,mealPrimaryKey = null),
-            Meal(name = "meal 2a", canteenId = 2, date = "02.11.2019", prices = prices, notes = note,category = "",id = 0,mealPrimaryKey = null),
-            Meal(name = "meal 2b", canteenId = 2, date = "02.11.2019", prices = prices, notes = note,category = "",id = 0,mealPrimaryKey = null),
-            Meal(name = "meal 2c", canteenId = 2, date = "02.11.2019", prices = prices, notes = note,category = "",id = 0,mealPrimaryKey = null),
-            Meal(name = "meal 3a", canteenId = 3, date = "01.01.2019", prices = prices, notes = note,category = "",id = 0,mealPrimaryKey = null),
-            Meal(name = "meal 3b", canteenId = 3, date = "11.01.2019", prices = prices, notes = note,category = "",id = 0,mealPrimaryKey = null),
-            Meal(name = "meal 3c", canteenId = 3, date = "11.01.2019", prices = prices, notes = note,category = "",id = 0,mealPrimaryKey = null),
-            Meal(name = "meal 4a", canteenId = 4, date = "1.2.2019", prices = prices, notes = note,category = "",id = 0,mealPrimaryKey = 0)
+            Meal(
+                name = "meal 1a",
+                canteenId = 1,
+                date = "01.01.2019",
+                prices = prices,
+                notes = note,
+                category = "",
+                id = 0,
+                mealPrimaryKey = null
+            ),
+            Meal(
+                name = "meal 1b",
+                canteenId = 1,
+                date = "01.01.2019",
+                prices = prices,
+                notes = note,
+                category = "",
+                id = 0,
+                mealPrimaryKey = null
+            ),
+            Meal(
+                name = "meal 2a",
+                canteenId = 2,
+                date = "02.11.2019",
+                prices = prices,
+                notes = note,
+                category = "",
+                id = 0,
+                mealPrimaryKey = null
+            ),
+            Meal(
+                name = "meal 2b",
+                canteenId = 2,
+                date = "02.11.2019",
+                prices = prices,
+                notes = note,
+                category = "",
+                id = 0,
+                mealPrimaryKey = null
+            ),
+            Meal(
+                name = "meal 2c",
+                canteenId = 2,
+                date = "02.11.2019",
+                prices = prices,
+                notes = note,
+                category = "",
+                id = 0,
+                mealPrimaryKey = null
+            ),
+            Meal(
+                name = "meal 3a",
+                canteenId = 3,
+                date = "01.01.2019",
+                prices = prices,
+                notes = note,
+                category = "",
+                id = 0,
+                mealPrimaryKey = null
+            ),
+            Meal(
+                name = "meal 3b",
+                canteenId = 3,
+                date = "11.01.2019",
+                prices = prices,
+                notes = note,
+                category = "",
+                id = 0,
+                mealPrimaryKey = null
+            ),
+            Meal(
+                name = "meal 3c",
+                canteenId = 3,
+                date = "11.01.2019",
+                prices = prices,
+                notes = note,
+                category = "",
+                id = 0,
+                mealPrimaryKey = null
+            ),
+            Meal(
+                name = "meal 4a",
+                canteenId = 4,
+                date = "1.2.2019",
+                prices = prices,
+                notes = note,
+                category = "",
+                id = 0,
+                mealPrimaryKey = 0
+            )
         )
 
 
-        mealDaoDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), MealDatabase::class.java)
+        mensaDaoDatabase = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), MensaDatabase::class.java)
             .build()
         for (meal in mealList) {
 
-            mealDaoDatabase.mealDatabaseDao().insert(meal)
+            mensaDaoDatabase.mealDatabaseDao().insert(meal)
+        }
+
+        canteenList = listOf<Canteen>(
+            Canteen(null, 0, "canteenA", "cityA", "", null),
+            Canteen(null, 4, "canteenAA", "cityA", "", null),
+            Canteen(null, 1, "canteenB", "cityB", "", null),
+            Canteen(null, 2, "canteenC", "cityC", "", null)
+        )
+
+        for (canteen in canteenList) {
+            mensaDaoDatabase.canteenDatabaseDao().insert(canteen)
         }
 
     }
 
     @After
     fun closeDb() {
-        mealDaoDatabase.close()
+        mensaDaoDatabase.close()
     }
 
     @Test
     fun getAllMealInDatabase() {
 
-        mealDaoDatabase.mealDatabaseDao().getAllMeal().subscribe {
+        mensaDaoDatabase.mealDatabaseDao().getAllMeal().subscribe {
 
             assertEquals(
                 "count of items in database should be the same as count of items in list of meal",
@@ -75,10 +169,33 @@ open class MealDaoTest {
     @Test
     fun getMealsWithCanteenIdAndDate() {
 
-        mealDaoDatabase.mealDatabaseDao().getMealsWithCanteenIdAndDate(1, "01.01.2019").subscribe {
+        mensaDaoDatabase.mealDatabaseDao().getMealsWithCanteenIdAndDate(1, "01.01.2019").subscribe {
 
             assertEquals("but canteen id should be equal", 2, it.count())
         }
 
+    }
+
+    @Test
+    fun getAllCanteenInDatabase() {
+
+        mensaDaoDatabase.canteenDatabaseDao().getAllCanteens().subscribe {
+
+            assertEquals(
+                "count of items in database should be the same as count of items in list of canteen",
+                canteenList.count(),
+                it.count()
+            )
+        }
+    }
+
+    @Test
+    fun getCanteensWithCity() {
+
+
+        mensaDaoDatabase.canteenDatabaseDao().getCanteenWithCity("cityA").subscribe {
+
+            assertEquals("should return canteens only available in cityA", 1, it.count())
+        }
     }
 }

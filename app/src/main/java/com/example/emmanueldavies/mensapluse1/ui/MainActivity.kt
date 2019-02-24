@@ -91,7 +91,7 @@ lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
             override fun onPageSelected(p0: Int) {
                 mensaViewModel.mealAdapter.listOfMeals.clear()
                 var formattedDate  =  mensaViewModel.getFormatedTitleDate(p0)
-              mensaViewModel.getMealAtACertainDateInFuture(formattedDate!!)
+              mensaViewModel.getMealAtACertainDateInFuture(formattedDate)
 
             }
 
@@ -143,7 +143,7 @@ lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
            spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
 
 
-           activity?.spinner  ?.adapter = spinnerArrayAdapter
+           activity.spinner  ?.adapter = spinnerArrayAdapter
            activity?.spinner  ?.onItemSelectedListener = activity
        }
     }

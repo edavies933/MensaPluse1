@@ -30,4 +30,6 @@ class Canteen(
     @Ignore
     var coordinates: List<Double>?
 
-)
+){
+    constructor() : this(0,0,"","","",null)
+}

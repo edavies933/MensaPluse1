@@ -27,17 +27,12 @@ class MensaViewModel @Inject constructor(val repository: MensaRepository) : View
 
     fun getCanteenNames(locationData: LocationData) {
 
-        var x = repository.getCanteenDataWithCoordinates(locationData)
-            .subscribeOn(Schedulers.io())
+        var x = repository.getCanteenDataWithCoordinates(locationData)!!.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess {
                 log.info("on do Success for canteen call " + it.toString())
 
                 this.canteens.postValue(it)
-                for (x in it) {
-                    log.info("this are the canteens " + x.toString())
-
-                }
             }
             .map {
 
@@ -65,25 +60,20 @@ class MensaViewModel @Inject constructor(val repository: MensaRepository) : View
 
 
     private fun FormatMeals(it: List<Meal>) {
+        mealAdapter.listOfMeals.clear()
         mealAdapter.listOfMeals = it.toMutableList()
         mealAdapter.notifyDataSetChanged()
     }
 
     private fun getMealAtThisDay(canteen: Canteen, date: String) {
-
         repository.getMealsByCanteenId(canteen?.id!!, date)
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSuccess { it ->
-                var x = it
                 FormatMeals(it)
-                for (x in it) {
-                    log.info("on do Success for meal call " + x.toString())
-                }
-
             }
             .subscribe({},
                 {
-                    var x = it
+                    var error = it //Todo handle this
 
                 })
     }

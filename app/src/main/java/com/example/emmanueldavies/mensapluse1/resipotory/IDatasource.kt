@@ -11,6 +11,8 @@ interface ILocalDataSource {
 
     fun  queryForMealsByCanteenId (canteenId :Int, date:String) : Maybe<List<Meal>>
     fun saveMealsToDataBase(meals: List<Meal>)
+    fun queryForCanteensWithCity(cityName: String): Maybe<List<Canteen>>
+    fun saveCanteensToDataBase(canteens: List<Canteen>)
 }
 
 

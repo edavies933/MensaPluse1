@@ -8,7 +8,8 @@ import java.time.LocalDate
 import java.util.*
 
 @Dao
-interface  MealDao {
+@TypeConverters(DateTypeConverter::class)
+interface  MensaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(meal: Meal)
@@ -29,28 +30,8 @@ interface  MealDao {
     fun getAllMeal () : Maybe<List<Meal>>
 
 
+
+
 }
 
-//@Dao
-//interface  CanteenDao {
-//
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    fun insert(canteen: Canteen)
-//
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    fun insertListOfMeal(canteen: List<Canteen>)
-//
-//    @Update
-//    fun update(canteen: Canteen)
-//
-//    @Delete
-//    fun delete (canteen: Canteen)
-//
-//    @Query("SELECT * FROM canteen_table WHERE Id = :canteenId ")
-//    fun getCanteenWithCanteenId(canteenId: Int): Maybe<List<Canteen>>
-//
-//    @Query("SELECT * FROM canteen_table")
-//    fun getAllCanteens () : Maybe<List<Canteen>>
-//
-//
-//}
+

@@ -2,10 +2,11 @@ package com.example.emmanueldavies.mensapluse1.di.modules
 
 import android.app.Application
 import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
+import com.example.emmanueldavies.mensapluse1.CityNameGeoCoder
 import com.example.emmanueldavies.mensapluse1.api.MensaAPIInterface
-import com.example.emmanueldavies.mensapluse1.rooom.MealDao
-import com.example.emmanueldavies.mensapluse1.rooom.MealDatabase
+import com.example.emmanueldavies.mensapluse1.rooom.CanteenDao
+import com.example.emmanueldavies.mensapluse1.rooom.MensaDao
+import com.example.emmanueldavies.mensapluse1.rooom.MensaDatabase
 import com.example.emmanueldavies.newMensaplus.resipotory.*
 import dagger.Module
 import dagger.Provides
@@ -33,16 +34,16 @@ class AppModule {
 
     @Provides
     @Reusable
-    internal fun getMensaRepository(localDataSource: ILocalDataSource, remoteDataSource: IRemoteDataSource
+    internal fun getMensaRepository(localDataSource: ILocalDataSource, remoteDataSource: IRemoteDataSource, cityGeoCoder: CityNameGeoCoder
     ): MensaRepository {
-        return MensaRepository(remoteDataSource, localDataSource)
+        return MensaRepository(remoteDataSource, localDataSource,cityGeoCoder)
     }
 
     @Provides
     @Reusable
-    internal fun providesLocalDataSource(mealDao: MealDao): ILocalDataSource {
+    internal fun providesLocalDataSource(mensaDao: MensaDao,canteenDao: CanteenDao): ILocalDataSource {
 
-        return LocalDataSource(mealDao)
+        return LocalDataSource(mensaDao,canteenDao)
     }
 
     @Provides
@@ -55,38 +56,33 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun providesMealDataBase(application: Application):MealDatabase{
+    fun providesMealDataBase(application: Application):MensaDatabase{
 
-        var mealDataBase = Room.databaseBuilder(application,MealDatabase::class.java,
+        var mensalDataBase = Room.databaseBuilder(application,MensaDatabase::class.java,
             "meal_database.db").build()
-        return  mealDataBase
+        return  mensalDataBase
     }
 
     @Provides
     @Singleton
-    fun providesMealDao (mealDatabase: MealDatabase) : MealDao {
+    fun providesMealDao (mensaDatabase: MensaDatabase) : MensaDao {
 
-        return  mealDatabase.mealDatabaseDao()
+        return  mensaDatabase.mealDatabaseDao()
     }
 
+    @Provides
+    @Singleton
+    fun providesCanteenDao (mensaDatabase: MensaDatabase) : CanteenDao {
+
+        return  mensaDatabase.canteenDatabaseDao()
+    }
 
 //    @Provides
 //    @Singleton
-//    fun providesCanteenDataBase(application: Application):CanteenDatabase{
+//    fun providesCityGeoCoder (context: Application) : CityNameGeoCoder {
 //
-//        var canteenDatabase = Room.databaseBuilder(application,CanteenDatabase::class.java,
-//            "canteen_database.db").build()
-//        return  canteenDatabase
+//        return  mensaDatabase.canteenDatabaseDao()
 //    }
-//
-//    @Provides
-//    @Singleton
-//    fun providesCanteenDao (canteenDatabase: CanteenDatabase) : CanteenDao {
-//
-//        return  canteenDatabase.canteenDatabaseDao()
-//    }
-
-
 
 }
 
