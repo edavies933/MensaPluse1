@@ -1,27 +1,37 @@
 package com.example.emmanueldavies.mensapluse1.ui
 
+
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
+import android.support.design.widget.BaseTransientBottomBar.LENGTH_INDEFINITE
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.GravityCompat
+import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import com.example.emmanueldavies.mensapluse1.BuildConfig.APPLICATION_ID
+import com.example.emmanueldavies.mensapluse1.LocaionManager.LocationDetector
+import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
+import com.example.emmanueldavies.mensapluse1.R
+import com.example.emmanueldavies.mensapluse1.data.LocationData
+import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
-import android.support.v4.view.ViewPager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.app.FragmentManager
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
-import com.example.emmanueldavies.mensapluse1.R
-import com.example.emmanueldavies.mensapluse1.data.LocationData
 
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
@@ -31,26 +41,37 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     lateinit var mensaAppViewModelFactory: MensaAppViewModelFactory
     lateinit var mensaViewModel: MensaViewModel
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val TAG = "MainActivity"
+    private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
+
     override fun onFragmentInteraction(uri: Uri) {
     }
 
     @Inject
-lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    @Inject
+    lateinit var locationDetector: LocationDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.example.emmanueldavies.mensapluse1.R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         val actionbar: ActionBar? = supportActionBar
         actionbar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(com.example.emmanueldavies.mensapluse1.R.drawable.ic_menu_black_24dp)
-
+            setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
         }
+
         mensaViewModel = ViewModelProviders.of(this, mensaAppViewModelFactory).get(MensaViewModel::class.java)
-        mensaViewModel.getCanteenNames(LocationData(52.393535, 13.127814))
+        locationDetector.getLastKnowLocation(this).observe(this, Observer {
+
+            mensaViewModel.getCanteenNames(it!!)
+
+        })
+
         mensaViewModel.canteenNames.observe(this, Observer { m ->
 
             updateSpinnerTitles(this, m)
@@ -76,22 +97,22 @@ lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
-        for (i in 0 until 7)
-        {
-            var formattedDate  =  mensaViewModel.getFormatedTitleDate(i)
+        for (i in 0 until 7) {
+            var formattedDate = mensaViewModel.getFormatedTitleDate(i)
             adapter.addFragment(
                 MenuListFragment.newInstance(mensaViewModel.getFormattedDayName(i)),
-                formattedDate.substring(0,formattedDate.length - 5))
+                formattedDate.substring(0, formattedDate.length - 5)
+            )
         }
         viewPager.adapter = adapter
-        viewPager.addOnPageChangeListener (object : ViewPager.OnPageChangeListener{
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
             }
 
             override fun onPageSelected(p0: Int) {
                 mensaViewModel.mealAdapter.listOfMeals.clear()
-                var formattedDate  =  mensaViewModel.getFormatedTitleDate(p0)
-              mensaViewModel.getMealAtACertainDateInFuture(formattedDate)
+                var formattedDate = mensaViewModel.getFormatedTitleDate(p0)
+                mensaViewModel.getMealAtACertainDateInFuture(formattedDate)
 
             }
 
@@ -101,7 +122,7 @@ lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
         })
     }
 
-    internal inner class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter   (manager) {
+    internal inner class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
         private val mFragmentList = mutableListOf<Fragment>()
         private val mFragmentTitleList = mutableListOf<String>()
 
@@ -136,17 +157,88 @@ lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
     companion object {
         private fun updateSpinnerTitles(activity: MainActivity, canteenNames: List<String>?) {
-           var spinnerArrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-               activity, R.layout.spinner_item,
-               canteenNames
-           )
-           spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+            var spinnerArrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                activity, R.layout.spinner_item,
+                canteenNames
+            )
+            spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
 
 
-           activity.spinner  ?.adapter = spinnerArrayAdapter
-           activity?.spinner  ?.onItemSelectedListener = activity
-       }
+            activity.spinner?.adapter = spinnerArrayAdapter
+            activity?.spinner?.onItemSelectedListener = activity
+        }
+    }
+
+    override fun onStart() {
+
+        super.onStart()
     }
 
 
+    /**
+     * Shows a [Snackbar].
+     *
+     * @param snackStrId The id for the string resource for the Snackbar text.
+     * @param actionStrId The text of the action item.
+     * @param listener The listener associated with the Snackbar action.
+     */
+    private fun showSnackbar(
+        snackStrId: Int,
+        actionStrId: Int = 0,
+        listener: View.OnClickListener? = null
+    ) {
+        val snackbar = Snackbar.make(
+            findViewById(android.R.id.content), getString(snackStrId),
+            LENGTH_INDEFINITE
+        )
+        if (actionStrId != 0 && listener != null) {
+            snackbar.setAction(getString(actionStrId), listener)
+        }
+        snackbar.show()
+    }
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        Log.i(TAG, "onRequestPermissionResult")
+        if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
+            when {
+                // If user interaction was interrupted, the permission request is cancelled and you
+                // receive empty arrays.
+                grantResults.isEmpty() -> Log.i(TAG, "User interaction was cancelled.")
+
+                // Permission granted.
+                (grantResults[0] == PERMISSION_GRANTED) -> locationDetector.getLastLocation()
+
+                // Permission denied.
+
+                // Notify the user via a SnackBar that they have rejected a core permission for the
+                // app, which makes the Activity useless. In a real app, core permissions would
+                // typically be best requested during a welcome-screen flow.
+
+                // Additionally, it is important to remember that a permission might have been
+                // rejected without asking the user for permission (device policy or "Never ask
+                // again" prompts). Therefore, a user interface affordance is typically implemented
+                // when permissions are denied. Otherwise, your app could appear unresponsive to
+                // touches or interactions which have required permissions.
+                else -> {
+                    showSnackbar(R.string.permission_denied_explanation, R.string.settings,
+                        View.OnClickListener {
+                            // Build intent that displays the App settings screen.
+                            val intent = Intent().apply {
+                                action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                                data = Uri.fromParts("package", APPLICATION_ID, null)
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            }
+                            startActivity(intent)
+                        })
+                }
+            }
+        }
+    }
 }

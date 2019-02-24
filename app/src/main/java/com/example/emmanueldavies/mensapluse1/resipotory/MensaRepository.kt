@@ -11,16 +11,27 @@ import javax.inject.Inject
 
 class MensaRepository @Inject constructor(
     private var mRemoteDataSource: IRemoteDataSource,
-    private var mLocalDataSource: ILocalDataSource, private var geocoder: CityNameGeoCoder
+    private var mLocalDataSource: ILocalDataSource, private var geoCoder: CityNameGeoCoder
 ) {
     fun getCanteenDataWithCoordinates(locationData: LocationData): Maybe<List<Canteen>>? {
-        var cityName = geocoder.convertLatLonToCityName(locationData.Latitude, locationData.Longitude)
-        return Maybe.concat(mLocalDataSource.queryForCanteensWithCity(cityName).subscribeOn(Schedulers.io()),
-            mRemoteDataSource.getCanteenDataWithCoordinates(locationData)
+        var cityName = geoCoder.convertLatLonToCityName(locationData.Latitude, locationData.Longitude)
+        if (cityName == null){
+
+            return mRemoteDataSource.getCanteenDataWithCoordinates(locationData)
                 .doOnSuccess {
                     mLocalDataSource.saveCanteensToDataBase(it)
+                }
 
-                }).filter { !it.isEmpty() }.firstElement()
+        }else {
+            return Maybe.concat(mLocalDataSource.queryForCanteensWithCity(cityName).subscribeOn(Schedulers.io()),
+                mRemoteDataSource.getCanteenDataWithCoordinates(locationData)
+                    .doOnSuccess {
+                        mLocalDataSource.saveCanteensToDataBase(it)
+
+                    }).filter { !it.isEmpty() }.firstElement().onErrorComplete()
+
+        }
+
 
 
         //Todo Check if there is internet or not

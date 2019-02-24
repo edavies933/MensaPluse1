@@ -2,8 +2,6 @@ package com.example.emmanueldavies.mensapluse1.data
 import android.arch.persistence.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import io.reactivex.Maybe
-import java.util.*
 
 @Entity(tableName = "meal_table")
 data class Meal(
