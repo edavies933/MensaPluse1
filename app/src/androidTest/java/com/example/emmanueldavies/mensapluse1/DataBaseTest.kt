@@ -195,7 +195,7 @@ open class MealDaoTest {
 
         mensaDaoDatabase.canteenDatabaseDao().getCanteenWithCity("cityA").subscribe {
 
-            assertEquals("should return canteens only available in cityA", 1, it.count())
+            assertEquals("should return canteens only available in cityA", 2, it.count())
         }
     }
 }

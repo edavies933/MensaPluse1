@@ -1,6 +1,7 @@
 package com.example.emmanueldavies.mensapluse1.ui
 
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -26,11 +27,12 @@ import com.example.emmanueldavies.mensapluse1.BuildConfig.APPLICATION_ID
 import com.example.emmanueldavies.mensapluse1.LocaionManager.LocationDetector
 import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
 import com.example.emmanueldavies.mensapluse1.R
-import com.example.emmanueldavies.mensapluse1.data.LocationData
-import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
+import io.spacenoodles.makingyourappreactive.viewModel.state.Status
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_menu_list.*
 import javax.inject.Inject
 
 
@@ -40,10 +42,9 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     @Inject
     lateinit var mensaAppViewModelFactory: MensaAppViewModelFactory
     lateinit var mensaViewModel: MensaViewModel
-
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val TAG = "MainActivity"
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
+    var mainActivityState: MutableLiveData<MainActivityState> = MutableLiveData()
 
     override fun onFragmentInteraction(uri: Uri) {
     }
@@ -65,21 +66,31 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
         }
 
+
+
+
         mensaViewModel = ViewModelProviders.of(this, mensaAppViewModelFactory).get(MensaViewModel::class.java)
+
+        mensaViewModel.state.observe(
+            this, Observer {
+                update(it!!)
+            }
+        )
         locationDetector.getLastKnowLocation(this).observe(this, Observer {
 
             mensaViewModel.getCanteenNames(it!!)
 
+
         })
 
-        mensaViewModel.canteenNames.observe(this, Observer { m ->
+        mensaViewModel.canteenNames.observe(this, Observer { canteenNames ->
 
-            updateSpinnerTitles(this, m)
-            if (m != null) {
-                canteemNames = m
+            //            swiperefresh.isRefreshing = false
+            updateSpinnerTitles(this, canteenNames)
+            if (canteenNames != null) {
+                canteemNames = canteenNames
             }
         })
-        mensaViewModel.repository.getCanteenDataWithCoordinates(LocationData(52.393535, 13.127814))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -110,6 +121,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             }
 
             override fun onPageSelected(p0: Int) {
+
                 mensaViewModel.mealAdapter.listOfMeals.clear()
                 var formattedDate = mensaViewModel.getFormatedTitleDate(p0)
                 mensaViewModel.getMealAtACertainDateInFuture(formattedDate)
@@ -162,16 +174,36 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 canteenNames
             )
             spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
-
-
             activity.spinner?.adapter = spinnerArrayAdapter
             activity?.spinner?.onItemSelectedListener = activity
         }
     }
 
-    override fun onStart() {
+    private fun update(state: MainActivityState) {
+        when (state.status) {
+            Status.LOADING -> {
 
-        super.onStart()
+                mainActivityState.postValue(state)
+            }
+
+            Status.NO_LOCATION_FOUND -> {
+                mainActivityState.postValue(state)
+
+            }
+
+            Status.SUCCESS -> {
+                mainActivityState.postValue(state)
+
+            }
+
+            Status.COMPLETE -> {
+                mainActivityState.postValue(state)
+            }
+
+            Status.ERROR -> {
+                mainActivityState.postValue(state)
+            }
+        }
     }
 
 

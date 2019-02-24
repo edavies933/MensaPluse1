@@ -70,7 +70,7 @@ class LocationDetector @Inject constructor() {
 
 
     /**
-     * Return the current state of the permissions needed.
+     * Return the current mainActivityState of the permissions needed.
      */
     private fun checkPermissions() =
         ActivityCompat.checkSelfPermission(
@@ -101,7 +101,7 @@ class LocationDetector @Inject constructor() {
 
         } else {
             // Request permission. It's possible this can be auto answered if device policy
-            // sets the permission in a given state or the user denied the permission
+            // sets the permission in a given mainActivityState or the user denied the permission
             // previously and checked "Never ask again".
             Log.i(TAG, "Requesting permission")
             startLocationPermissionRequest()

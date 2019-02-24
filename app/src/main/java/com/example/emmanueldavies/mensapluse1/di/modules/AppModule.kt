@@ -34,9 +34,9 @@ class AppModule {
 
     @Provides
     @Reusable
-    internal fun getMensaRepository(localDataSource: ILocalDataSource, remoteDataSource: IRemoteDataSource, cityGeoCoder: CityNameGeoCoder
+    internal fun getMensaRepository(localDataSource: ILocalDataSource, remoteDataSource: IRemoteDataSource
     ): MensaRepository {
-        return MensaRepository(remoteDataSource, localDataSource,cityGeoCoder)
+        return MensaRepository(remoteDataSource, localDataSource)
     }
 
     @Provides

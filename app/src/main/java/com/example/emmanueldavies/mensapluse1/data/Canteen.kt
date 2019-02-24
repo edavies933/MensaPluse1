@@ -31,5 +31,5 @@ class Canteen(
     var coordinates: List<Double>?
 
 ){
-    constructor() : this(0,0,"","","",null)
+    constructor() : this(null,0,"","","",null)
 }

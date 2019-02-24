@@ -12,7 +12,7 @@ class CityNameGeoCoder @Inject constructor(context: Application) {
 
     fun convertLatLonToCityName(lat: Double, lon: Double): String? {
         var address = geoCoder.getFromLocation(lat, lon, 1)
-        if (address.count() > 1) {
+        if (address.count() > 0) {
             return address[0]?.locality
 
         }

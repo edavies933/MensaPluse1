@@ -1,27 +1,34 @@
 package com.example.emmanueldavies.mensapluse1.ui
 
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.emmanueldavies.mensapluse1.R
 import com.example.emmanueldavies.mensapluse1.databinding.FragmentMenuListBinding
 import com.example.emmanueldavies.mensapluse1.di.Injectable
+import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
+import io.spacenoodles.makingyourappreactive.viewModel.state.Status
+import kotlinx.android.synthetic.main.fragment_menu_list.*
 
 
 private const val TAB_TITLE = "param2"
 
 class MenuListFragment : Fragment(), Injectable {
 
-
     private var tabTitle: String? = null
     private var listener: OnFragmentInteractionListener? = null
     lateinit var binding: FragmentMenuListBinding
+    private var canteemNames: MutableList<String> = mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,11 +45,10 @@ class MenuListFragment : Fragment(), Injectable {
     ): View? {
 
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_menu_list,container,false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_menu_list, container, false)
 
-        return  binding.root
+        return binding.root
     }
-
 
 
     override fun onAttach(context: Context) {
@@ -63,16 +69,33 @@ class MenuListFragment : Fragment(), Injectable {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-binding.textView2.text = tabTitle
+        binding.dateTextView.text = tabTitle
+        binding.swiperefresh.setOnRefreshListener {
 
+            (activity as MainActivity).locationDetector.getLastLocation()
+        }
         initLayout()
+
+        (activity as MainActivity).mainActivityState.reobserve(activity as MainActivity
+        ) {
+            update(it!!)
+
+        }
 
     }
 
     private fun initLayout() {
         val layoutManager = LinearLayoutManager(activity)
-        binding. recyclerView.layoutManager = layoutManager
-        binding.  recyclerView.adapter = (activity as MainActivity).mensaViewModel.mealAdapter
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = (activity as MainActivity).mensaViewModel.mealAdapter
+
+
+//        (activity as MainActivity).mensaViewModel.canteenNames.observe(activity as MainActivity, Observer {
+//
+//            binding.swiperefresh.isRefreshing = false
+//
+//
+//        })
     }
 
 
@@ -90,4 +113,40 @@ binding.textView2.text = tabTitle
             }
     }
 
+    private fun update(state: MainActivityState) {
+        when (state.status) {
+            Status.LOADING -> {
+                progressBar?.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+
+            }
+
+            Status.NO_LOCATION_FOUND -> {
+                recyclerView.visibility = View.VISIBLE
+                recyclerView.visibility = View.VISIBLE
+            }
+
+            Status.SUCCESS -> {
+                progressBar?.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+            }
+
+            Status.COMPLETE -> {
+                recyclerView.visibility = View.GONE
+            }
+
+            Status.ERROR -> {
+                Log.e("MainActivity: ", state.error?.localizedMessage)
+            }
+        }
+    }
+
+
+
+}
+
+//extension function
+inline fun <T> LiveData<T>.reobserve(owner: LifecycleOwner, crossinline func: (T?) -> (Unit)) {
+    removeObservers(owner)
+    observe(owner, Observer<T> { t -> func(t) })
 }
