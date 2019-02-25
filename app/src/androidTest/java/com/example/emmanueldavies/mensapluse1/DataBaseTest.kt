@@ -198,4 +198,17 @@ open class MealDaoTest {
             assertEquals("should return canteens only available in cityA", 2, it.count())
         }
     }
+
+    @Test
+    fun deleteAllCanteens() {
+
+
+        mensaDaoDatabase.canteenDatabaseDao().deleteAllEntries()
+        val allCanteens = mensaDaoDatabase.canteenDatabaseDao().getAllCanteens().subscribe {
+
+            assertEquals("should delete all canteens row from canteen table ", 0, it.count())
+
+        }
+
+    }
 }

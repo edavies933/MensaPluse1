@@ -32,7 +32,6 @@ import dagger.android.support.HasSupportFragmentInjector
 import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
 import io.spacenoodles.makingyourappreactive.viewModel.state.Status
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_menu_list.*
 import javax.inject.Inject
 
 
@@ -66,7 +65,10 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
         }
 
+        swiperefresh.setOnRefreshListener {
 
+            locationDetector.getLastLocation()
+        }
 
 
         mensaViewModel = ViewModelProviders.of(this, mensaAppViewModelFactory).get(MensaViewModel::class.java)
@@ -80,12 +82,11 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
             mensaViewModel.getCanteenNames(it!!)
 
-
         })
 
         mensaViewModel.canteenNames.observe(this, Observer { canteenNames ->
 
-            //            swiperefresh.isRefreshing = false
+            swiperefresh.isRefreshing = false
             updateSpinnerTitles(this, canteenNames)
             if (canteenNames != null) {
                 canteemNames = canteenNames

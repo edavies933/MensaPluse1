@@ -17,6 +17,6 @@ interface  CanteenDao {
     fun getAllCanteens () : Maybe<List<Canteen>>
 
 
-    @Delete
-    fun delete (canteen: Canteen)
+    @Query("DELETE FROM canteen_table")
+    fun deleteAllEntries ()
 }

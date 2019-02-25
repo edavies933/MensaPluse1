@@ -70,10 +70,7 @@ class MenuListFragment : Fragment(), Injectable {
         super.onViewCreated(view, savedInstanceState)
 
         binding.dateTextView.text = tabTitle
-        binding.swiperefresh.setOnRefreshListener {
 
-            (activity as MainActivity).locationDetector.getLastLocation()
-        }
         initLayout()
 
         (activity as MainActivity).mainActivityState.reobserve(activity as MainActivity

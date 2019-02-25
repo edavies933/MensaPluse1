@@ -26,10 +26,7 @@
                 android:fontFamily="sans-serif-smallcaps" android:padding="8dp"
                 android:background="@color/common_google_signin_btn_text_dark_default"/>
 
-        <android.support.v4.widget.SwipeRefreshLayout
-                android:id="@+id/swiperefresh"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+
 
             <FrameLayout
                     android:layout_width="match_parent"
@@ -63,7 +60,6 @@
                         android:id="@+id/progressBar"/>
             </FrameLayout>
 
-        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 
