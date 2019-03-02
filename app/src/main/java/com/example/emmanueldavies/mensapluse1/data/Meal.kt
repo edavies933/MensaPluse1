@@ -7,31 +7,29 @@ import com.google.gson.annotations.SerializedName
 data class Meal(
     @SerializedName("id")
     @Expose
+    @PrimaryKey(autoGenerate = false)
     var id: Int?,
     @SerializedName("name")
     @Expose
-    var name: String? ,
+    var name: String?,
     @SerializedName("category")
     @Expose
-    var category: String? ,
+    var category: String?,
     var canteenId: Int,
 
     @SerializedName("prices")
     @Expose
     var prices: Prices?,
 
-    @PrimaryKey(autoGenerate = true)
-    var mealPrimaryKey: Int? ,
-
     @SerializedName("notes")
     @Expose
-    var notes: List<String>? ,
+    var notes: List<String>?,
 
     var date: String
 
 ){
 
-    constructor() : this(0,"","",0,null,null,null,"")
+    constructor() : this(0,"","",0,null,null,"")
 
 }
 

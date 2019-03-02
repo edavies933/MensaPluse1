@@ -29,9 +29,8 @@ interface  MensaDao {
     @Query("SELECT * FROM meal_table")
     fun getAllMeal () : Maybe<List<Meal>>
 
-
-
-
+    @Query("DELETE FROM meal_table WHERE CanteenId = :canteenId AND Date =  :canteenDate")
+    fun deleteMealOnDate (canteenId: Int, canteenDate: String )
 }
 
 

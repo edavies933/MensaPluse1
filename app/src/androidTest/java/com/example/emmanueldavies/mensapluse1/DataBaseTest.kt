@@ -42,8 +42,7 @@ open class MealDaoTest {
                 prices = prices,
                 notes = note,
                 category = "",
-                id = 0,
-                mealPrimaryKey = null
+                id = 0
             ),
             Meal(
                 name = "meal 1b",
@@ -52,8 +51,7 @@ open class MealDaoTest {
                 prices = prices,
                 notes = note,
                 category = "",
-                id = 0,
-                mealPrimaryKey = null
+                id = 0
             ),
             Meal(
                 name = "meal 2a",
@@ -62,8 +60,7 @@ open class MealDaoTest {
                 prices = prices,
                 notes = note,
                 category = "",
-                id = 0,
-                mealPrimaryKey = null
+                id = 0
             ),
             Meal(
                 name = "meal 2b",
@@ -72,8 +69,7 @@ open class MealDaoTest {
                 prices = prices,
                 notes = note,
                 category = "",
-                id = 0,
-                mealPrimaryKey = null
+                id = 0
             ),
             Meal(
                 name = "meal 2c",
@@ -82,8 +78,7 @@ open class MealDaoTest {
                 prices = prices,
                 notes = note,
                 category = "",
-                id = 0,
-                mealPrimaryKey = null
+                id = 0
             ),
             Meal(
                 name = "meal 3a",
@@ -92,8 +87,7 @@ open class MealDaoTest {
                 prices = prices,
                 notes = note,
                 category = "",
-                id = 0,
-                mealPrimaryKey = null
+                id = 0
             ),
             Meal(
                 name = "meal 3b",
@@ -102,8 +96,7 @@ open class MealDaoTest {
                 prices = prices,
                 notes = note,
                 category = "",
-                id = 0,
-                mealPrimaryKey = null
+                id = 0
             ),
             Meal(
                 name = "meal 3c",
@@ -112,8 +105,7 @@ open class MealDaoTest {
                 prices = prices,
                 notes = note,
                 category = "",
-                id = 0,
-                mealPrimaryKey = null
+                id = 0
             ),
             Meal(
                 name = "meal 4a",
@@ -122,8 +114,7 @@ open class MealDaoTest {
                 prices = prices,
                 notes = note,
                 category = "",
-                id = 0,
-                mealPrimaryKey = 0
+                id = 0
             )
         )
 
@@ -211,4 +202,16 @@ open class MealDaoTest {
         }
 
     }
+
+
+    @Test
+    fun deleteAllMealOnDay() {
+        mensaDaoDatabase.mealDatabaseDao().deleteMealOnDate(1, "01.01.2019")
+        val allCanteens = mensaDaoDatabase.mealDatabaseDao().getAllMeal().subscribe {
+            assertEquals( 7, it.count())
+
+        }
+
+    }
+
 }

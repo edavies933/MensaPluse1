@@ -11,6 +11,10 @@ class LocalDataSource(private val mensaDao: MensaDao, private val canteenDao: Ca
     ILocalDataSource {
 
     override fun saveMealsToDataBase(meals: List<Meal>) {
+//        mensaDao.deleteMealOnDate(meals[0]?.canteenId,meals[0]?.date)
+
+        mensaDao.getAllMeal().subscribe()
+
         for (meal in meals) {
             mensaDao.insert(meal)
         }

@@ -7,6 +7,7 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
+import android.provider.SyncStateContract.Helpers.update
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -75,8 +76,6 @@ class MenuListFragment : Fragment(), Injectable {
 
         (activity as MainActivity).mainActivityState.reobserve(activity as MainActivity
         ) {
-            update(it!!)
-
         }
 
     }
@@ -86,13 +85,6 @@ class MenuListFragment : Fragment(), Injectable {
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = (activity as MainActivity).mensaViewModel.mealAdapter
 
-
-//        (activity as MainActivity).mensaViewModel.canteenNames.observe(activity as MainActivity, Observer {
-//
-//            binding.swiperefresh.isRefreshing = false
-//
-//
-//        })
     }
 
 
@@ -110,34 +102,11 @@ class MenuListFragment : Fragment(), Injectable {
             }
     }
 
-    private fun update(state: MainActivityState) {
-        when (state.status) {
-            Status.LOADING -> {
-                progressBar?.visibility = View.VISIBLE
-                recyclerView.visibility = View.GONE
 
-            }
-
-            Status.NO_LOCATION_FOUND -> {
-                recyclerView.visibility = View.VISIBLE
-                recyclerView.visibility = View.VISIBLE
-            }
-
-            Status.SUCCESS -> {
-                progressBar?.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
-            }
-
-            Status.COMPLETE -> {
-                recyclerView.visibility = View.GONE
-            }
-
-            Status.ERROR -> {
-                Log.e("MainActivity: ", state.error?.localizedMessage)
-            }
-        }
+    override fun onPause() {
+        super.onPause()
+        (activity as MainActivity).mainActivityState.removeObservers(this)
     }
-
 
 
 }

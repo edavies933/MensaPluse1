@@ -11,11 +11,12 @@ import android.util.Log
 import android.view.View
 import com.example.emmanueldavies.mensapluse1.R
 import com.example.emmanueldavies.mensapluse1.data.LocationData
+import com.example.emmanueldavies.mensapluse1.ui.MainActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import javax.inject.Inject
 
-class LocationDetector @Inject constructor() {
+class LocationDetector @Inject constructor() : ILocationDetector {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val TAG = "MainActivity"
@@ -24,7 +25,7 @@ class LocationDetector @Inject constructor() {
 
     var locationLifeData: MutableLiveData<LocationData> = MutableLiveData()
 
-    fun getLastKnowLocation(activityContext: Activity): MutableLiveData<LocationData> {
+    override fun getLastKnowLocation(activityContext: Activity): MutableLiveData<LocationData> {
 
         activity = activityContext
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activityContext)
@@ -56,13 +57,14 @@ class LocationDetector @Inject constructor() {
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful && task.result != null) {
 
-                    var  locationData = LocationData(task.result.latitude, task.result.longitude)
+                    var locationData = LocationData(task.result.latitude, task.result.longitude)
                     task.result.latitude
 
                     locationLifeData.postValue(locationData)
                 } else {
                     Log.w(TAG, "getLastLocation:exception", task.exception)
-                    showSnackbar(R.string.no_location_detected)
+                    (activity as MainActivity).viewSnap. showSnackbar( activity,R.string.no_location_detected)
+                    locationLifeData.postValue(null)
                 }
             }
 
@@ -94,7 +96,7 @@ class LocationDetector @Inject constructor() {
             // Provide an additional rationale to the user. This would happen if the user denied the
             // request previously, but didn't check the "Don't ask again" checkbox.
             Log.i(TAG, "Displaying permission rationale to provide additional activityContext.")
-            showSnackbar(R.string.permission_rationale, android.R.string.ok, View.OnClickListener {
+            (activity as MainActivity).viewSnap. showSnackbar(activity, R.string.permission_rationale, android.R.string.ok, View.OnClickListener {
                 // Request permission
                 startLocationPermissionRequest()
             })
@@ -108,25 +110,5 @@ class LocationDetector @Inject constructor() {
         }
     }
 
-
-    /**
-     * Shows a [Snackbar].
-     *
-     * @param snackStrId The id for the string resource for the Snackbar text.
-     * @param actionStrId The text of the action item.
-     * @param listener The listener associated with the Snackbar action.
-     */
-    private fun showSnackbar(
-        snackStrId: Int,
-        actionStrId: Int = 0,
-        listener: View.OnClickListener? = null
-    ) {
-//        val snackbar = Snackbar.make( findViewById(android.R.id.content), getString(snackStrId),
-//            BaseTransientBottomBar.LENGTH_INDEFINITE
-//        )
-        if (actionStrId != 0 && listener != null) {
-//            snackbar.setAction(getString(actionStrId), listener)
-        }
-//        snackbar.show()
-    }
 }
+

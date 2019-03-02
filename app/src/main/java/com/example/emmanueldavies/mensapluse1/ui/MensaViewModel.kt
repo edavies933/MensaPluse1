@@ -2,24 +2,24 @@ package com.example.emmanueldavies.mensapluse1.ui
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.example.emmanueldavies.mensapluse1.CityNameGeoCoder
+import com.example.emmanueldavies.mensapluse1.Utility.CityNameGeoCoder
+import com.example.emmanueldavies.mensapluse1.Utility.ICityNameGeoCoder
+import com.example.emmanueldavies.mensapluse1.Utility.INetworkManager
 import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.LocationData
 import com.example.emmanueldavies.mensapluse1.data.Meal
+import com.example.emmanueldavies.mensapluse1.resipotory.IRepository
 import com.example.emmanueldavies.newMensaplus.resipotory.MensaRepository
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
-import java.io.IOException
-import java.net.InetSocketAddress
-import java.net.Socket
+import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.logging.Logger
 import javax.inject.Inject
 
-class MensaViewModel @Inject constructor(val repository: MensaRepository, private var geoCoder: CityNameGeoCoder) :
+class MensaViewModel @Inject constructor(private val repository: IRepository, private var geoCoder: ICityNameGeoCoder, private var netWorkManager: INetworkManager) :
     ViewModel() {
 
 
@@ -36,88 +36,43 @@ class MensaViewModel @Inject constructor(val repository: MensaRepository, privat
     private val log = Logger.getLogger(MensaViewModel::class.java.name)
 
     fun getCanteenNames(locationData: LocationData) {
+        var cityName = geoCoder.convertLatLonToCityName(locationData.Latitude, locationData.Longitude)
 
-        hasInternetConnection().doOnSuccess { internet ->
+        if (cityName == null) {
 
-            if (internet) {
-                repository.mRemoteDataSource.getCanteenDataWithCoordinates(locationData)
+            state.postValue(MainActivityState.noLocationFound())
+        } else {
+            var dispose = repository.getCanteenNames(locationData, cityName).map {
+                //
+                canteens.postValue(it)
+                var listOfCanteenNames: MutableList<String> = mutableListOf()
 
-                    .map {
-                        //
-                        canteens.postValue(it)
-                        var listOfCanteenNames: MutableList<String> = mutableListOf()
-
-                        for (item in it) {
-                            listOfCanteenNames.add(item.name!!)
-                        }
-                        repository.mLocalDataSource.saveCanteensToDataBase(it)
-
-                        listOfCanteenNames
-                    }.observeOn(AndroidSchedulers.mainThread())
-                    .doOnSuccess {
-
-                        this.canteenNames.postValue(it)
-                    }.subscribe()
-
-            } else {
-                var cityName = geoCoder.convertLatLonToCityName(locationData.Latitude, locationData.Longitude)
-                if (cityName != null) {
-                    repository.mLocalDataSource.queryForCanteensWithCity(cityName).subscribeOn(Schedulers.io())
-                        .map {
-                            var listOfCanteenNames: MutableList<String> = mutableListOf()
-
-                            if (it.count() >= 1) {
-                                this.canteens.postValue(it)
-                                for (item in it) {
-                                    listOfCanteenNames.add(item.name!!)
-                                }
-                                state.postValue(MainActivityState.noInternet())
-
-                            }
-                            listOfCanteenNames
-
-                        }
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSuccess {
-                            this.canteenNames.postValue(it)
-                            state.postValue(MainActivityState.noInternet())
-                            }
-                        .subscribe()
-                } else {
-                    state.postValue(MainActivityState.noLocationFound())
+                for (item in it) {
+                    listOfCanteenNames.add(item.name!!)
                 }
-            }
 
-        }.subscribe()
+                listOfCanteenNames
+            }.observeOn(AndroidSchedulers.mainThread())
+                .doOnSuccess {
+                    state.postValue(MainActivityState.loading())
 
-//
-//        mealAdapter.clearAdapter()
-//        var x = repository.getCanteenDataWithCoordinates(locationData)!!.subscribeOn(Schedulers.io()).doOnSubscribe {
-//
-//            state.postValue(MainActivityState.loading())
-//
-//        }
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .doOnSuccess {
-//                this.canteens.postValue(it)
-//                state.postValue(MainActivityState.success())
-//            }
-//            .map {
-//
-//                var listOfCanteenNames: MutableList<String> = mutableListOf()
-//
-//                for (item in it) {
-//                    listOfCanteenNames.add(item.name!!)
-//                }
-//                listOfCanteenNames
-//            }
-//            .subscribe({
-//                canteenNames.postValue(it)
-//            },
-//                {
-//                    state.postValue(MainActivityState.error(it))
-//
-//                })
+                    this.canteenNames.postValue(it)
+                }.doOnError {
+
+                    state.postValue(MainActivityState.noInternet())
+                    var exception: HttpException = (it as HttpException)
+                    var code = exception.code()
+                    var x = it
+                }.subscribe({},
+                    {
+                        var x = it
+                        state.postValue(MainActivityState.noInternet())
+
+
+                    })
+
+        }
+
     }
 
     fun getMeals(canteenName: String) {
@@ -132,23 +87,41 @@ class MensaViewModel @Inject constructor(val repository: MensaRepository, privat
         mealAdapter.clearAdapter()
         mealAdapter.listOfMeals = it.toMutableList()
         mealAdapter.notifyDataSetChanged()
+
     }
 
     private fun getMealAtThisDay(canteen: Canteen, date: String) {
-        var x = repository.getMealsByCanteenId(canteen?.id!!, date).doOnSubscribe {
+        state.postValue(MainActivityState.loading())
 
-            state.postValue(MainActivityState.loading())
-
-        }
+        var disposeLater = repository.getMealsByCanteenId(canteen.id!!, date)
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnSuccess { it ->
+            .subscribe({
                 FormatMeals(it)
                 state.postValue(MainActivityState.success())
 
-            }
-            .subscribe({},
+            },
                 {
-                    state.postValue(MainActivityState.error(it))
+                    state.postValue(MainActivityState.loading())
+
+                    mealAdapter.clearAdapter()
+
+                    netWorkManager.  hasInternetConnection()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread()).subscribe({ hasInternet ->
+
+                            if (hasInternet) {
+
+                                state.postValue(MainActivityState.noDataFound())
+                            } else {
+                                state.postValue(MainActivityState.noInternet())
+
+                            }
+                        },
+                            {
+
+                            })
+
+
 
                 })
     }
@@ -179,23 +152,12 @@ class MensaViewModel @Inject constructor(val repository: MensaRepository, privat
     }
 
 
-    fun hasInternetConnection(): Single<Boolean> {
-        return Single.fromCallable {
-            try {
-                // Connect to Google DNS to check for connection
-                val timeoutMs = 1500
-                val socket = Socket()
-                val socketAddress = InetSocketAddress("8.8.8.8", 53)
 
-                socket.connect(socketAddress, timeoutMs)
-                socket.close()
 
-                true
-            } catch (e: IOException) {
-                false
-            }
-        }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-    }
+
+
 }
+
+
+
+

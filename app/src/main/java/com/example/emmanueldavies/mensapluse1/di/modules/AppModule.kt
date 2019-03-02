@@ -2,8 +2,16 @@ package com.example.emmanueldavies.mensapluse1.di.modules
 
 import android.app.Application
 import android.arch.persistence.room.Room
-import com.example.emmanueldavies.mensapluse1.CityNameGeoCoder
+import android.content.Context
+import com.example.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
+import com.example.emmanueldavies.mensapluse1.LocaionManager.LocationDetector
+import com.example.emmanueldavies.mensapluse1.Utility.CityNameGeoCoder
+import com.example.emmanueldavies.mensapluse1.Utility.ICityNameGeoCoder
+import com.example.emmanueldavies.mensapluse1.Utility.INetworkManager
+import com.example.emmanueldavies.mensapluse1.Utility.NetWorkManagerImpl
 import com.example.emmanueldavies.mensapluse1.api.MensaAPIInterface
+import com.example.emmanueldavies.mensapluse1.resipotory.IRemoteDataSource
+import com.example.emmanueldavies.mensapluse1.resipotory.IRepository
 import com.example.emmanueldavies.mensapluse1.rooom.CanteenDao
 import com.example.emmanueldavies.mensapluse1.rooom.MensaDao
 import com.example.emmanueldavies.mensapluse1.rooom.MensaDatabase
@@ -35,7 +43,7 @@ class AppModule {
     @Provides
     @Reusable
     internal fun getMensaRepository(localDataSource: ILocalDataSource, remoteDataSource: IRemoteDataSource
-    ): MensaRepository {
+    ): IRepository {
         return MensaRepository(remoteDataSource, localDataSource)
     }
 
@@ -59,7 +67,7 @@ class AppModule {
     fun providesMealDataBase(application: Application):MensaDatabase{
 
         var mensalDataBase = Room.databaseBuilder(application,MensaDatabase::class.java,
-            "meal_database.db").build()
+            "meal_database.db").fallbackToDestructiveMigration().build()
         return  mensalDataBase
     }
 
@@ -77,12 +85,26 @@ class AppModule {
         return  mensaDatabase.canteenDatabaseDao()
     }
 
-//    @Provides
-//    @Singleton
-//    fun providesCityGeoCoder (context: Application) : CityNameGeoCoder {
-//
-//        return  mensaDatabase.canteenDatabaseDao()
-//    }
+    @Provides
+    @Singleton
+    fun  providesLocationDetector () : ILocationDetector {
+
+        return LocationDetector()
+    }
+
+    @Provides
+    @Singleton
+    fun  providesINetWorkManager () : INetworkManager {
+
+        return NetWorkManagerImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun  providesIICityNameGeoCoder (context: Application) : ICityNameGeoCoder {
+
+        return CityNameGeoCoder(context)
+    }
 
 }
 

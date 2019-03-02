@@ -13,8 +13,8 @@ data class MainActivityState private constructor(val status: Status,
             return MainActivityState(Status.SUCCESS)
         }
 
-        fun complete(): MainActivityState {
-            return MainActivityState(Status.COMPLETE)
+        fun noDataFound(): MainActivityState {
+            return MainActivityState(Status.NO_DATA_FOUND)
         }
 
         fun noLocationFound(): MainActivityState {

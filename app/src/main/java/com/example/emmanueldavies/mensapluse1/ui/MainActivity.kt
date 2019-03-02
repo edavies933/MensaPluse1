@@ -1,6 +1,7 @@
 package com.example.emmanueldavies.mensapluse1.ui
 
 
+import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -13,7 +14,7 @@ import android.support.design.widget.BaseTransientBottomBar.LENGTH_INDEFINITE
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBar
@@ -24,7 +25,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.example.emmanueldavies.mensapluse1.BuildConfig.APPLICATION_ID
-import com.example.emmanueldavies.mensapluse1.LocaionManager.LocationDetector
+import com.example.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
 import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
 import com.example.emmanueldavies.mensapluse1.R
 import dagger.android.DispatchingAndroidInjector
@@ -37,7 +38,12 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     MenuListFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener {
-    private var canteemNames: MutableList<String> = mutableListOf()
+
+    @Inject
+   lateinit  var viewSnap  : ViewSnap
+
+
+    private var canteenNames: MutableList<String> = mutableListOf()
     @Inject
     lateinit var mensaAppViewModelFactory: MensaAppViewModelFactory
     lateinit var mensaViewModel: MensaViewModel
@@ -51,7 +57,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
     @Inject
-    lateinit var locationDetector: LocationDetector
+    lateinit var locationDetector: ILocationDetector
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,10 +70,10 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
         }
-
+        swiperefresh.setDistanceToTriggerSync(100)
         swiperefresh.setOnRefreshListener {
 
-            locationDetector.getLastLocation()
+            locationDetector.getLastKnowLocation(this)
         }
 
 
@@ -79,8 +85,13 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             }
         )
         locationDetector.getLastKnowLocation(this).observe(this, Observer {
+            if (it == null) {
 
-            mensaViewModel.getCanteenNames(it!!)
+                update(MainActivityState.noLocationFound())
+            } else {
+                mensaViewModel.getCanteenNames(it)
+
+            }
 
         })
 
@@ -89,7 +100,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             swiperefresh.isRefreshing = false
             updateSpinnerTitles(this, canteenNames)
             if (canteenNames != null) {
-                canteemNames = canteenNames
+                this.canteenNames = canteenNames
             }
         })
     }
@@ -122,8 +133,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             }
 
             override fun onPageSelected(p0: Int) {
-
-                mensaViewModel.mealAdapter.listOfMeals.clear()
                 var formattedDate = mensaViewModel.getFormatedTitleDate(p0)
                 mensaViewModel.getMealAtACertainDateInFuture(formattedDate)
 
@@ -135,7 +144,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         })
     }
 
-    internal inner class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
+    internal inner class ViewPagerAdapter(manager: FragmentManager) : FragmentStatePagerAdapter(manager) {
         private val mFragmentList = mutableListOf<Fragment>()
         private val mFragmentTitleList = mutableListOf<String>()
 
@@ -157,12 +166,11 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         }
     }
 
-
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        var canteenName = canteemNames[position]
+        var canteenName = canteenNames[position]
         mensaViewModel.getMeals(canteenName)
         setupViewPager(viewpager)
         tabLayout.setupWithViewPager(viewpager)
@@ -185,26 +193,46 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             Status.LOADING -> {
 
                 mainActivityState.postValue(state)
+                swiperefresh?.isRefreshing = false
+                progressBar.visibility = View.VISIBLE
+
             }
 
             Status.NO_LOCATION_FOUND -> {
                 mainActivityState.postValue(state)
+                swiperefresh?.isRefreshing = false
 
             }
 
             Status.SUCCESS -> {
                 mainActivityState.postValue(state)
+                noMealCardView.visibility = View.GONE
+                progressBar.visibility = View.GONE
+                viewSnap.dismissSnackbar()
 
             }
 
-            Status.COMPLETE -> {
+            Status.NO_DATA_FOUND -> {
                 mainActivityState.postValue(state)
+                noMealCardView.visibility = View.VISIBLE
+                progressBar.visibility = View.GONE
+                viewSnap.showSnackbar( this,R.string.no_meal)
+                progressBar.visibility = View.VISIBLE
+
             }
 
             Status.ERROR -> {
                 mainActivityState.postValue(state)
             }
+
+            Status.NO_INTERNET -> {
+                mainActivityState.postValue(state)
+                viewSnap.showSnackbar(this, R.string.no_internet_message)
+                swiperefresh?.isRefreshing = false
+                progressBar.visibility = View.VISIBLE
+            }
         }
+
     }
 
 
@@ -214,21 +242,40 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
      * @param snackStrId The id for the string resource for the Snackbar text.
      * @param actionStrId The text of the action item.
      * @param listener The listener associated with the Snackbar action.
+     *
+     *
      */
-    private fun showSnackbar(
-        snackStrId: Int,
-        actionStrId: Int = 0,
-        listener: View.OnClickListener? = null
-    ) {
-        val snackbar = Snackbar.make(
-            findViewById(android.R.id.content), getString(snackStrId),
-            LENGTH_INDEFINITE
-        )
-        if (actionStrId != 0 && listener != null) {
-            snackbar.setAction(getString(actionStrId), listener)
+
+    class ViewSnap @Inject constructor () {
+        lateinit var snackbar: Snackbar
+
+        fun showSnackbar(
+            activity: Activity,
+            snackStrId: Int,
+            actionStrId: Int = 0,
+            listener: View.OnClickListener? = null
+        ) {
+             snackbar = Snackbar.make(
+                activity.findViewById(android.R.id.content), activity.getString(snackStrId),
+                LENGTH_INDEFINITE
+            )
+            if (actionStrId != 0 && listener != null) {
+                snackbar.setAction(activity.getString(actionStrId), listener)
+            } else {
+
+                snackbar.setAction(activity.getString(R.string.snackbar_ok_button)) { snackbar.dismiss() }
+            }
+            snackbar.show()
         }
-        snackbar.show()
+
+        fun dismissSnackbar() {
+            if (snackbar.isShown) {
+                snackbar.dismiss()
+            }
+        }
+
     }
+
 
     /**
      * Callback received when a permissions request has been completed.
@@ -246,7 +293,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 grantResults.isEmpty() -> Log.i(TAG, "User interaction was cancelled.")
 
                 // Permission granted.
-                (grantResults[0] == PERMISSION_GRANTED) -> locationDetector.getLastLocation()
+                (grantResults[0] == PERMISSION_GRANTED) -> locationDetector.getLastKnowLocation(this)
 
                 // Permission denied.
 
@@ -260,7 +307,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 // when permissions are denied. Otherwise, your app could appear unresponsive to
                 // touches or interactions which have required permissions.
                 else -> {
-                    showSnackbar(R.string.permission_denied_explanation, R.string.settings,
+                    viewSnap.showSnackbar(this, R.string.permission_denied_explanation, R.string.settings,
                         View.OnClickListener {
                             // Build intent that displays the App settings screen.
                             val intent = Intent().apply {

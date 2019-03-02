@@ -6,5 +6,6 @@ enum class Status {
     COMPLETE,
     NO_LOCATION_FOUND,
     NO_INTERNET,
+    NO_DATA_FOUND,
     ERROR
 }

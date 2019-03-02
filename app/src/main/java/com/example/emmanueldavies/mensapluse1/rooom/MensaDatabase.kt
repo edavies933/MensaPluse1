@@ -7,7 +7,7 @@ import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.Meal
 
 
-@Database(entities = [Meal::class, Canteen::class], version = 1)
+@Database(entities = [Meal::class, Canteen::class], version = 3)
 @TypeConverters(DateTypeConverter::class)
 abstract class MensaDatabase  : RoomDatabase() {
 

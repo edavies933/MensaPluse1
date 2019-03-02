@@ -1,78 +1,50 @@
 package com.example.emmanueldavies.newMensaplus.resipotory
 
-import com.example.emmanueldavies.mensapluse1.CityNameGeoCoder
 import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.LocationData
 import com.example.emmanueldavies.mensapluse1.data.Meal
+import com.example.emmanueldavies.mensapluse1.resipotory.IRemoteDataSource
+import com.example.emmanueldavies.mensapluse1.resipotory.IRepository
 import io.reactivex.Maybe
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import java.io.IOException
-import java.net.InetSocketAddress
-import java.net.Socket
-import javax.inject.Inject
 
 
-class MensaRepository @Inject constructor(
-     var mRemoteDataSource: IRemoteDataSource,
-     var mLocalDataSource: ILocalDataSource
-) {
-//    fun getCanteenDataWithCoordinates(locationData: LocationData): Maybe<List<Canteen>>? {
-//        var cityName = geoCoder.convertLatLonToCityName(locationData.Latitude, locationData.Longitude)
-//        if (cityName == null){
-//
-//            return mRemoteDataSource.getCanteenDataWithCoordinates(locationData)
-//                .doOnSuccess {
-//                    mLocalDataSource.saveCanteensToDataBase(it)
-//                }.doOnError {
-//
-//                    var xx = it
-//                }
-//
-//        }else {
-//            return Maybe.concat(mLocalDataSource.queryForCanteensWithCity(cityName).subscribeOn(Schedulers.io()),
-//                mRemoteDataSource.getCanteenDataWithCoordinates(locationData).onErrorComplete()
-//                    .doOnSuccess {
-//                        mLocalDataSource.saveCanteensToDataBase(it)
-//
-//                    }.doOnError {
-//
-//                        var xx = it
-//                    }).filter { !it.isEmpty() }.firstElement().doOnError {
-//
-//                var xx = it
-//            }
-//
-//        }
-//
-//
-//
-//        //Todo Check if there is internet or not
-//    }
 
-    fun getMealsByCanteenId(canteenId: Int, date: String): Maybe<List<Meal>> {
-        return Maybe.concat(mLocalDataSource.queryForMealsByCanteenId(canteenId, date).subscribeOn(Schedulers.io()).doOnSuccess {
 
-            var mealsFromDb = it
-        },
-            mRemoteDataSource.queryForMealsByCanteenId(canteenId, date)
-                .doOnSuccess {
-                addCanteenIdToMeals(it, canteenId, date)
-                mLocalDataSource.saveMealsToDataBase(it)
-            }.doOnError {
 
-                var xx = it
-            }).filter { !it.isEmpty() }
+class MensaRepository (
+    var mRemoteDataSource: IRemoteDataSource,
+    var mLocalDataSource: ILocalDataSource
+) : IRepository {
 
-            .firstElement().doOnError {
 
-                var xx = it
+    override fun getCanteenNames(locationData: LocationData, cityName: String): Maybe<List<Canteen>> {
+
+        return Maybe.concat(
+            // get items from db first
+            mLocalDataSource.queryForCanteensWithCity(cityName).subscribeOn(Schedulers.io()).doOnSuccess {
+            },
+            mRemoteDataSource.getCanteenDataWithCoordinates(locationData).subscribeOn(Schedulers.io()).doOnSuccess {
+                mLocalDataSource.saveCanteensToDataBase(it)
             }
-
+        ).filter { !it.isEmpty() }.firstElement()
     }
 
-    private fun addCanteenIdToMeals(
+    override fun getMealsByCanteenId(canteenId: Int, date: String): Maybe<List<Meal>> {
+        return Maybe.concat(mLocalDataSource.queryForMealsByCanteenId(
+            canteenId,
+            date
+        ).subscribeOn(Schedulers.io()),
+
+        mRemoteDataSource.queryForMealsByCanteenId(canteenId, date)
+                .doOnSuccess {
+                    addCanteenIdToMeals(it, canteenId, date)
+                    mLocalDataSource.saveMealsToDataBase(it)
+                }).filter { !it.isEmpty() }
+            .firstElement()
+    }
+
+    fun addCanteenIdToMeals(
         it: List<Meal>,
         canteenId: Int,
         date: String
@@ -81,6 +53,10 @@ class MensaRepository @Inject constructor(
             meal.canteenId = canteenId
             meal.date = date
         }
+        mLocalDataSource.saveMealsToDataBase(it)
     }
+
+
+
 
 }
