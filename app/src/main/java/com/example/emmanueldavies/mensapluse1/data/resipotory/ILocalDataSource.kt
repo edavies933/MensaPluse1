@@ -1,11 +1,8 @@
 package com.example.emmanueldavies.newMensaplus.resipotory
 
-import android.arch.lifecycle.LiveData
 import com.example.emmanueldavies.mensapluse1.data.Canteen
-import com.example.emmanueldavies.mensapluse1.data.LocationData
 import com.example.emmanueldavies.mensapluse1.data.Meal
 import io.reactivex.Maybe
-import io.reactivex.Observable
 
 
 interface ILocalDataSource {

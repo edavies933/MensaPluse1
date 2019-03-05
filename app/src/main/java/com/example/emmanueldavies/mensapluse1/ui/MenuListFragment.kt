@@ -21,7 +21,6 @@ import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
 import io.spacenoodles.makingyourappreactive.viewModel.state.Status
 import kotlinx.android.synthetic.main.fragment_menu_list.*
 
-
 private const val TAB_TITLE = "param2"
 
 class MenuListFragment : Fragment(), Injectable {
@@ -84,7 +83,6 @@ class MenuListFragment : Fragment(), Injectable {
         val layoutManager = LinearLayoutManager(activity)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = (activity as MainActivity).mensaViewModel.mealAdapter
-
     }
 
 
@@ -107,7 +105,6 @@ class MenuListFragment : Fragment(), Injectable {
         super.onPause()
         (activity as MainActivity).mainActivityState.removeObservers(this)
     }
-
 
 }
 

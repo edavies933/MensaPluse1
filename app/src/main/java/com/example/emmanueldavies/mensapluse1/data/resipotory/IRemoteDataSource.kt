@@ -1,4 +1,4 @@
-package com.example.emmanueldavies.mensapluse1.resipotory
+package com.example.emmanueldavies.mensapluse1.data.resipotory
 
 import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.LocationData

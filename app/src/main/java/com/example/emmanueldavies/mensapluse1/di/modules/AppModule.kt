@@ -2,7 +2,6 @@ package com.example.emmanueldavies.mensapluse1.di.modules
 
 import android.app.Application
 import android.arch.persistence.room.Room
-import android.content.Context
 import com.example.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
 import com.example.emmanueldavies.mensapluse1.LocaionManager.LocationDetector
 import com.example.emmanueldavies.mensapluse1.Utility.CityNameGeoCoder
@@ -10,8 +9,8 @@ import com.example.emmanueldavies.mensapluse1.Utility.ICityNameGeoCoder
 import com.example.emmanueldavies.mensapluse1.Utility.INetworkManager
 import com.example.emmanueldavies.mensapluse1.Utility.NetWorkManagerImpl
 import com.example.emmanueldavies.mensapluse1.api.MensaAPIInterface
-import com.example.emmanueldavies.mensapluse1.resipotory.IRemoteDataSource
-import com.example.emmanueldavies.mensapluse1.resipotory.IRepository
+import com.example.emmanueldavies.mensapluse1.data.resipotory.IRemoteDataSource
+import com.example.emmanueldavies.mensapluse1.data.resipotory.IRepository
 import com.example.emmanueldavies.mensapluse1.rooom.CanteenDao
 import com.example.emmanueldavies.mensapluse1.rooom.MensaDao
 import com.example.emmanueldavies.mensapluse1.rooom.MensaDatabase

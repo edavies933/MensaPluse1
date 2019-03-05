@@ -38,18 +38,22 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     MenuListFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener {
-
     @Inject
-   lateinit  var viewSnap  : ViewSnap
-
-
+    lateinit var viewSnap: ViewSnap
     private var canteenNames: MutableList<String> = mutableListOf()
     @Inject
     lateinit var mensaAppViewModelFactory: MensaAppViewModelFactory
     lateinit var mensaViewModel: MensaViewModel
-    private val TAG = "MainActivity"
-    private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     var mainActivityState: MutableLiveData<MainActivityState> = MutableLiveData()
+
+
+    companion object {
+        const val NUMBER_OF_DAYS = 7
+        const val REQUEST_PERMISSIONS_REQUEST_CODE = 34
+        const val TRAILING_CHARACTER = 5
+        const val TAG = "MainActivity"
+    }
+
 
     override fun onFragmentInteraction(uri: Uri) {
     }
@@ -62,7 +66,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         val actionbar: ActionBar? = supportActionBar
@@ -75,7 +78,6 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
             locationDetector.getLastKnowLocation(this)
         }
-
 
         mensaViewModel = ViewModelProviders.of(this, mensaAppViewModelFactory).get(MensaViewModel::class.java)
 
@@ -120,11 +122,11 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
-        for (i in 0 until 7) {
-            var formattedDate = mensaViewModel.getFormatedTitleDate(i)
+        for (i in 0 until NUMBER_OF_DAYS) {
+            var formattedDate = mensaViewModel.getFormattedTitleDate(i)
             adapter.addFragment(
                 MenuListFragment.newInstance(mensaViewModel.getFormattedDayName(i)),
-                formattedDate.substring(0, formattedDate.length - 5)
+                formattedDate.substring(0, formattedDate.length - TRAILING_CHARACTER)
             )
         }
         viewPager.adapter = adapter
@@ -133,7 +135,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             }
 
             override fun onPageSelected(p0: Int) {
-                var formattedDate = mensaViewModel.getFormatedTitleDate(p0)
+                var formattedDate = mensaViewModel.getFormattedTitleDate(p0)
                 mensaViewModel.getMealAtACertainDateInFuture(formattedDate)
 
             }
@@ -162,7 +164,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return mFragmentTitleList.get(position)
+            return mFragmentTitleList[position]
         }
     }
 
@@ -176,17 +178,16 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         tabLayout.setupWithViewPager(viewpager)
     }
 
-    companion object {
-        private fun updateSpinnerTitles(activity: MainActivity, canteenNames: List<String>?) {
-            var spinnerArrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                activity, R.layout.spinner_item,
-                canteenNames
-            )
-            spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
-            activity.spinner?.adapter = spinnerArrayAdapter
-            activity?.spinner?.onItemSelectedListener = activity
-        }
+    private fun updateSpinnerTitles(activity: MainActivity, canteenNames: List<String>?) {
+        var spinnerArrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+            activity, R.layout.spinner_item,
+            canteenNames
+        )
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+        activity.spinner?.adapter = spinnerArrayAdapter
+        activity?.spinner?.onItemSelectedListener = activity
     }
+
 
     private fun update(state: MainActivityState) {
         when (state.status) {
@@ -208,7 +209,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 mainActivityState.postValue(state)
                 noMealCardView.visibility = View.GONE
                 progressBar.visibility = View.GONE
-                viewSnap.dismissSnackbar()
+                viewSnap.dismissSnackBar()
 
             }
 
@@ -216,8 +217,8 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 mainActivityState.postValue(state)
                 noMealCardView.visibility = View.VISIBLE
                 progressBar.visibility = View.GONE
-                viewSnap.showSnackbar( this,R.string.no_meal)
-                progressBar.visibility = View.VISIBLE
+                viewSnap.showSnackBar(this, R.string.no_meal)
+                progressBar.visibility = View.GONE
 
             }
 
@@ -227,50 +228,44 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
             Status.NO_INTERNET -> {
                 mainActivityState.postValue(state)
-                viewSnap.showSnackbar(this, R.string.no_internet_message)
+                viewSnap.showSnackBar(this, R.string.no_internet_message)
                 swiperefresh?.isRefreshing = false
-                progressBar.visibility = View.VISIBLE
+                progressBar.visibility = View.INVISIBLE
+                noMealCardView.visibility = View.INVISIBLE
+
             }
         }
 
     }
 
 
-    /**
-     * Shows a [Snackbar].
-     *
-     * @param snackStrId The id for the string resource for the Snackbar text.
-     * @param actionStrId The text of the action item.
-     * @param listener The listener associated with the Snackbar action.
-     *
-     *
-     */
+    class ViewSnap @Inject constructor() {
+        lateinit var snackBar: Snackbar
 
-    class ViewSnap @Inject constructor () {
-        lateinit var snackbar: Snackbar
-
-        fun showSnackbar(
+        fun showSnackBar(
             activity: Activity,
             snackStrId: Int,
             actionStrId: Int = 0,
             listener: View.OnClickListener? = null
         ) {
-             snackbar = Snackbar.make(
+
+
+            snackBar = Snackbar.make(
                 activity.findViewById(android.R.id.content), activity.getString(snackStrId),
                 LENGTH_INDEFINITE
             )
             if (actionStrId != 0 && listener != null) {
-                snackbar.setAction(activity.getString(actionStrId), listener)
+                snackBar.setAction(activity.getString(actionStrId), listener)
             } else {
 
-                snackbar.setAction(activity.getString(R.string.snackbar_ok_button)) { snackbar.dismiss() }
+                snackBar.setAction(activity.getString(R.string.snackbar_ok_button)) { snackBar.dismiss() }
             }
-            snackbar.show()
+            snackBar.show()
         }
 
-        fun dismissSnackbar() {
-            if (snackbar.isShown) {
-                snackbar.dismiss()
+        fun dismissSnackBar() {
+            if (snackBar?.isShown) {
+                snackBar.dismiss()
             }
         }
 
@@ -307,7 +302,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 // when permissions are denied. Otherwise, your app could appear unresponsive to
                 // touches or interactions which have required permissions.
                 else -> {
-                    viewSnap.showSnackbar(this, R.string.permission_denied_explanation, R.string.settings,
+                    viewSnap.showSnackBar(this, R.string.permission_denied_explanation, R.string.settings,
                         View.OnClickListener {
                             // Build intent that displays the App settings screen.
                             val intent = Intent().apply {

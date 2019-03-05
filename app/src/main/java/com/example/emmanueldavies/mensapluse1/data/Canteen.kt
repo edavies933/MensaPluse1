@@ -9,7 +9,6 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "canteen_table")
 class Canteen(
 
-
     @PrimaryKey(autoGenerate = true)
     var canteenPrimaryKey: Int?,
     @SerializedName("id")

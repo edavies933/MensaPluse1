@@ -28,5 +28,10 @@
     <string name="no_internet_message">You are offline please connect to internet to get updated Data.</string>
     <string name="no_meal">Unfortunately No Meals are available on this Day</string>
     <string name="snackbar_ok_button">ok</string>
+    <string name="todays_menu_title">Today\'s Menu</string>
+    <string name="tomorrow_menu_title">Tomorrow\'s Menu</string>
+    <string name="date_format">EEEE, MMM d, \'\'yy</string>
+    <string name="menu_on">Menu on" "</string>
+    <string name="title_date_format">E dd-MM-yyyy</string>
 
 </resources>

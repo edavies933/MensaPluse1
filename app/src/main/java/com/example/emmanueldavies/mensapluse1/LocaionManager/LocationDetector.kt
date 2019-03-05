@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.content.pm.PackageManager
-import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.util.Log
 import android.view.View
@@ -63,7 +62,7 @@ class LocationDetector @Inject constructor() : ILocationDetector {
                     locationLifeData.postValue(locationData)
                 } else {
                     Log.w(TAG, "getLastLocation:exception", task.exception)
-                    (activity as MainActivity).viewSnap. showSnackbar( activity,R.string.no_location_detected)
+                    (activity as MainActivity).viewSnap. showSnackBar( activity,R.string.no_location_detected)
                     locationLifeData.postValue(null)
                 }
             }
@@ -96,7 +95,7 @@ class LocationDetector @Inject constructor() : ILocationDetector {
             // Provide an additional rationale to the user. This would happen if the user denied the
             // request previously, but didn't check the "Don't ask again" checkbox.
             Log.i(TAG, "Displaying permission rationale to provide additional activityContext.")
-            (activity as MainActivity).viewSnap. showSnackbar(activity, R.string.permission_rationale, android.R.string.ok, View.OnClickListener {
+            (activity as MainActivity).viewSnap. showSnackBar(activity, R.string.permission_rationale, android.R.string.ok, View.OnClickListener {
                 // Request permission
                 startLocationPermissionRequest()
             })

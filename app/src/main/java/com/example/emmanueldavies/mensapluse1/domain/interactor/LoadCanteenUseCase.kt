@@ -1,0 +1,46 @@
+/*
+ * Copyright (C) 2018 StepStone Services Sp. z o.o.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+package com.example.emmanueldavies.mensapluse1.domain.interactor
+
+import com.example.emmanueldavies.mensapluse1.Utility.CityNameGeoCoder
+import com.example.emmanueldavies.mensapluse1.data.Canteen
+import com.example.emmanueldavies.mensapluse1.data.LocationData
+import com.example.emmanueldavies.mensapluse1.data.Meal
+import com.example.emmanueldavies.mensapluse1.domain.interactor.base.SingleUseCase
+import com.example.emmanueldavies.mensapluse1.data.resipotory.IRepository
+import com.example.emmanueldavies.mensapluse1.domain.model.MenuAtDate
+import com.stepstone.reactiveusecasessample.domain.executor.PostExecutionThread
+import com.stepstone.reactiveusecasessample.domain.executor.ThreadExecutor
+import io.reactivex.Single
+import javax.inject.Inject
+
+class LoadCanteenUseCase
+@Inject
+constructor(
+    threadExecutor: ThreadExecutor,
+    postExecutionThread: PostExecutionThread,
+    private val contentRepository: IRepository
+) : SingleUseCase<List<Canteen>, LocationData>(threadExecutor, postExecutionThread) {
+
+    override fun buildUseCaseSingle(locationData: LocationData?): Single<List<Canteen>> {
+
+        return contentRepository.getCanteens(locationData!!).toSingle()
+    }
+}
+
+
