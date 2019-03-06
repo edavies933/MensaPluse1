@@ -132,11 +132,12 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         viewPager.adapter = adapter
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
+                getMealsAtDate(0)
+
             }
 
             override fun onPageSelected(p0: Int) {
-                var formattedDate = mensaViewModel.getFormattedTitleDate(p0)
-                mensaViewModel.getMealAtACertainDateInFuture(formattedDate)
+                getMealsAtDate(p0)
 
             }
 
@@ -144,6 +145,11 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             }
 
         })
+    }
+
+    private fun getMealsAtDate(p0: Int) {
+        var formattedDate = mensaViewModel.getFormattedTitleDate(p0)
+        mensaViewModel.getMealAtACertainDateInFuture(formattedDate)
     }
 
     internal inner class ViewPagerAdapter(manager: FragmentManager) : FragmentStatePagerAdapter(manager) {
