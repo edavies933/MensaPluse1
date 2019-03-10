@@ -1,10 +1,10 @@
 package com.example.emmanueldavies.mensapluse1.ui
 
-
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
@@ -20,10 +20,14 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import com.example.emmanueldavies.mensapluse1.BuildConfig.APPLICATION_ID
 import com.example.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
 import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
@@ -32,12 +36,13 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
 import io.spacenoodles.makingyourappreactive.viewModel.state.Status
+import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
-    MenuListFragment.OnFragmentInteractionListener, AdapterView.OnItemSelectedListener {
+    MenuListFragment.OnFragmentInteractionListener {
     @Inject
     lateinit var viewSnap: ViewSnap
     private var canteenNames: MutableList<String> = mutableListOf()
@@ -46,6 +51,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     lateinit var mensaViewModel: MensaViewModel
     var mainActivityState: MutableLiveData<MainActivityState> = MutableLiveData()
 
+    var currentTabNumber = 0
 
     companion object {
         const val NUMBER_OF_DAYS = 7
@@ -83,20 +89,20 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
         mensaViewModel.state.observe(
             this, Observer {
-                update(it!!)
+                updateView(it!!)
             }
         )
         locationDetector.getLastKnowLocation(this).observe(this, Observer {
             if (it == null) {
 
-                update(MainActivityState.noLocationFound())
+                updateView(MainActivityState.noLocationFound())
             } else {
                 mensaViewModel.getCanteenNames(it)
 
             }
 
         })
-
+//
         mensaViewModel.canteenNames.observe(this, Observer { canteenNames ->
 
             swiperefresh.isRefreshing = false
@@ -124,20 +130,31 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
         for (i in 0 until NUMBER_OF_DAYS) {
             var formattedDate = mensaViewModel.getFormattedTitleDate(i)
+                .substring(0, mensaViewModel.getFormattedTitleDate(i).length - TRAILING_CHARACTER)
+
             adapter.addFragment(
                 MenuListFragment.newInstance(mensaViewModel.getFormattedDayName(i)),
-                formattedDate.substring(0, formattedDate.length - TRAILING_CHARACTER)
+                formattedDate
             )
         }
         viewPager.adapter = adapter
+        viewPager.currentItem = currentTabNumber
+        getMealsAtDate(currentTabNumber)
+
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-                getMealsAtDate(0)
+//                getMealsAtDate(0)
 
             }
 
             override fun onPageSelected(p0: Int) {
-                getMealsAtDate(p0)
+
+                if (currentTabNumber != p0) {
+                    viewPager.invalidate()
+                    currentTabNumber = p0
+                    getMealsAtDate(p0)
+                }
+
 
             }
 
@@ -148,7 +165,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     }
 
     private fun getMealsAtDate(p0: Int) {
-        var formattedDate = mensaViewModel.getFormattedTitleDate(p0)
+        var formattedDate = mensaViewModel.getFormattedApiDate(p0)
         mensaViewModel.getMealAtACertainDateInFuture(formattedDate)
     }
 
@@ -174,74 +191,79 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         }
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
+
+    var spinnerOnItemSelectedListener = object : OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            var canteenName = canteenNames[position]
+            mensaViewModel.getMeals(canteenName)
+            setupViewPager(viewpager)
+            tabLayout.setupWithViewPager(viewpager)
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+
+        }
+
     }
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        var canteenName = canteenNames[position]
-        mensaViewModel.getMeals(canteenName)
-        setupViewPager(viewpager)
-        tabLayout.setupWithViewPager(viewpager)
-    }
 
     private fun updateSpinnerTitles(activity: MainActivity, canteenNames: List<String>?) {
-        var spinnerArrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-            activity, R.layout.spinner_item,
-            canteenNames
-        )
-        spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
-        activity.spinner?.adapter = spinnerArrayAdapter
-        activity?.spinner?.onItemSelectedListener = activity
+
+        if (canteenNames != null) {
+            val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, canteenNames)
+
+
+            var spinnerArrayAdapter = CustomSpinnerAdapter(this, R.layout.spinner_item, canteenNames)
+//            var spinnerArrayAdapter    = ArrayAdapter(
+//            activity,android.R.layout.simple_spinner_item,
+//            canteenNames
+//        )
+//            spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
+            activity.spinner?.adapter = spinnerArrayAdapter
+            activity?.spinner?.onItemSelectedListener = spinnerOnItemSelectedListener
+
+
+        }
+
     }
 
-
-    private fun update(state: MainActivityState) {
+    private fun updateView(state: MainActivityState) {
         when (state.status) {
             Status.LOADING -> {
 
-                mainActivityState.postValue(state)
-                swiperefresh?.isRefreshing = false
-                progressBar.visibility = View.VISIBLE
 
             }
 
             Status.NO_LOCATION_FOUND -> {
-                mainActivityState.postValue(state)
-                swiperefresh?.isRefreshing = false
 
+                infoTextView.visibility = View.VISIBLE
+                noInternetTexView.visibility = View.GONE
+                infoTextView.text = this.getString(R.string.no_location_detected)
             }
 
             Status.SUCCESS -> {
-                mainActivityState.postValue(state)
-                noMealCardView.visibility = View.GONE
-                progressBar.visibility = View.GONE
-                viewSnap.dismissSnackBar()
+
+                infoTextView.visibility = View.GONE
+                noInternetTexView.visibility = View.GONE
 
             }
 
             Status.NO_DATA_FOUND -> {
-                mainActivityState.postValue(state)
-                noMealCardView.visibility = View.VISIBLE
-                progressBar.visibility = View.GONE
-                viewSnap.showSnackBar(this, R.string.no_meal)
-                progressBar.visibility = View.GONE
 
-            }
+                infoTextView.visibility = View.VISIBLE
+                noInternetTexView.visibility = View.GONE
+                infoTextView.text = this.getString(R.string.no_meal)
 
-            Status.ERROR -> {
-                mainActivityState.postValue(state)
             }
 
             Status.NO_INTERNET -> {
-                mainActivityState.postValue(state)
-                viewSnap.showSnackBar(this, R.string.no_internet_message)
-                swiperefresh?.isRefreshing = false
-                progressBar.visibility = View.INVISIBLE
-                noMealCardView.visibility = View.INVISIBLE
+
+                infoTextView.visibility = View.GONE
+                noInternetTexView.visibility = View.VISIBLE
+                noInternetTexView.text = this.getString(R.string.no_internet_message)
 
             }
         }
-
     }
 
 
@@ -322,4 +344,40 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             }
         }
     }
+
+
+}
+
+
+class CustomSpinnerAdapter : ArrayAdapter<String> {
+    private var CustomSpinnerItems: List<String>
+
+    constructor(context: Context, resource: Int, pickerItems: List<String>) : super(
+        context,
+        resource,
+        pickerItems
+    ) {
+        this.CustomSpinnerItems = pickerItems
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        return CustomSpinnerView(position, parent)
+    }
+
+    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+        return CustomSpinnerView(position, parent)
+    }
+
+    private fun CustomSpinnerView(position: Int, parent: ViewGroup): View {
+        //Getting the Layout Inflater Service from the system
+        val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        //Inflating out custom spinner view
+        val customView = layoutInflater.inflate(R.layout.spinner_item, parent, false)
+        //Declaring and initializing the widgets in custom layout
+        val textView = customView?.findViewById(R.id.spinner_canteen_name) as? TextView
+        textView?.text = CustomSpinnerItems[position]
+        return customView
+    }
+
+
 }

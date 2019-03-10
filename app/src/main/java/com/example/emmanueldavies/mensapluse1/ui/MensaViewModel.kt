@@ -59,7 +59,7 @@ class MensaViewModel @Inject constructor(
     fun getMeals(canteenName: String) {
         mealAdapter.clearAdapter()
         canteen = this.canteens.value!!.first { canteen -> canteen.name.equals(canteenName) }
-        getMealAtThisDay(canteen, calendar.time.toString())
+        getMealAtThisDay(canteen, getFormattedApiDate(0))
     }
 
 
@@ -78,12 +78,12 @@ class MensaViewModel @Inject constructor(
                 .observeOn(AndroidSchedulers.mainThread()).subscribe({ internet ->
 
                     if (internet) {
-                        hasInternet = internet
                         loadMealUseCase.execute(MealObserver(), MenuAtDate(canteen.id!!, date, hasInternet))
 
                     } else {
                         loadMealUseCase.execute(MealObserver(), MenuAtDate(canteen.id!!, date))
                     }
+                    hasInternet = internet
                 },
                     {
                         state.postValue(MainActivityState.error(it))
@@ -108,6 +108,14 @@ class MensaViewModel @Inject constructor(
         return sdf.format(calendar.time)
     }
 
+
+    @SuppressLint("SimpleDateFormat")
+    fun getFormattedApiDate(daysLater: Int): String {
+        var calendar: Calendar = Calendar.getInstance()
+        calendar.add(Calendar.DAY_OF_MONTH, daysLater)
+        var sdf = SimpleDateFormat(context.getString(R.string.api_formatted_date))
+        return sdf.format(calendar.time)
+    }
 
     @SuppressLint("SimpleDateFormat")
     fun getFormattedDayName(daysLater: Int): String {
@@ -151,7 +159,6 @@ class MensaViewModel @Inject constructor(
         }
 
         override fun onError(e: Throwable) {
-            state.postValue(MainActivityState.loading())
             mealAdapter.clearAdapter()
             addSub(
                 netWorkManager.hasInternetConnection()

@@ -40,7 +40,7 @@ class MensaRepository(
                 .doOnSuccess {
                     addCanteenIdToMeals(it, canteenId, date)
                     mLocalDataSource.saveMealsToDataBase(it)
-                }).debounce(5000, TimeUnit.MILLISECONDS).firstElement().filter { !it.isEmpty() }
+                }).debounce(10000000000000, TimeUnit.MILLISECONDS).firstElement().filter { !it.isEmpty() }
     }
 
     override fun getMealDirectlyFromDb(canteenId: Int, date: String): Maybe<List<Meal>> {
