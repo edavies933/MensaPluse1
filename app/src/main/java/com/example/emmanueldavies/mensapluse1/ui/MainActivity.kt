@@ -6,7 +6,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -28,7 +28,7 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.example.emmanueldavies.mensapluse1.BuildConfig.APPLICATION_ID
+import com.example.emmanueldavies.mensapluse1.BuildConfig
 import com.example.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
 import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
 import com.example.emmanueldavies.mensapluse1.R
@@ -36,13 +36,13 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
 import io.spacenoodles.makingyourappreactive.viewModel.state.Status
-import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     MenuListFragment.OnFragmentInteractionListener {
+
     @Inject
     lateinit var viewSnap: ViewSnap
     private var canteenNames: MutableList<String> = mutableListOf()
@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     var mainActivityState: MutableLiveData<MainActivityState> = MutableLiveData()
 
     var currentTabNumber = 0
+
 
     companion object {
         const val NUMBER_OF_DAYS = 7
@@ -85,6 +86,8 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             locationDetector.getLastKnowLocation(this)
         }
 
+
+
         mensaViewModel = ViewModelProviders.of(this, mensaAppViewModelFactory).get(MensaViewModel::class.java)
 
         mensaViewModel.state.observe(
@@ -96,13 +99,13 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             if (it == null) {
 
                 updateView(MainActivityState.noLocationFound())
+
             } else {
                 mensaViewModel.getCanteenNames(it)
-
             }
 
         })
-//
+
         mensaViewModel.canteenNames.observe(this, Observer { canteenNames ->
 
             swiperefresh.isRefreshing = false
@@ -143,19 +146,15 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
-//                getMealsAtDate(0)
-
             }
 
             override fun onPageSelected(p0: Int) {
-
+                updateView(MainActivityState.loading())
                 if (currentTabNumber != p0) {
                     viewPager.invalidate()
                     currentTabNumber = p0
                     getMealsAtDate(p0)
                 }
-
-
             }
 
             override fun onPageScrollStateChanged(p0: Int) {
@@ -192,8 +191,9 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     }
 
 
-    var spinnerOnItemSelectedListener = object : OnItemSelectedListener {
+    private var spinnerOnItemSelectedListener = object : OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            updateView(MainActivityState.loading())
             var canteenName = canteenNames[position]
             mensaViewModel.getMeals(canteenName)
             setupViewPager(viewpager)
@@ -210,19 +210,9 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     private fun updateSpinnerTitles(activity: MainActivity, canteenNames: List<String>?) {
 
         if (canteenNames != null) {
-            val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, canteenNames)
-
-
             var spinnerArrayAdapter = CustomSpinnerAdapter(this, R.layout.spinner_item, canteenNames)
-//            var spinnerArrayAdapter    = ArrayAdapter(
-//            activity,android.R.layout.simple_spinner_item,
-//            canteenNames
-//        )
-//            spinnerArrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
             activity.spinner?.adapter = spinnerArrayAdapter
             activity?.spinner?.onItemSelectedListener = spinnerOnItemSelectedListener
-
-
         }
 
     }
@@ -230,38 +220,37 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     private fun updateView(state: MainActivityState) {
         when (state.status) {
             Status.LOADING -> {
-
+                progressBar.visibility = View.VISIBLE
 
             }
 
             Status.NO_LOCATION_FOUND -> {
-
                 infoTextView.visibility = View.VISIBLE
                 noInternetTexView.visibility = View.GONE
                 infoTextView.text = this.getString(R.string.no_location_detected)
+                progressBar.visibility = View.GONE
             }
 
             Status.SUCCESS -> {
-
                 infoTextView.visibility = View.GONE
                 noInternetTexView.visibility = View.GONE
+                progressBar.visibility = View.GONE
 
             }
 
             Status.NO_DATA_FOUND -> {
-
                 infoTextView.visibility = View.VISIBLE
                 noInternetTexView.visibility = View.GONE
                 infoTextView.text = this.getString(R.string.no_meal)
+                progressBar.visibility = View.GONE
 
             }
 
             Status.NO_INTERNET -> {
-
                 infoTextView.visibility = View.GONE
                 noInternetTexView.visibility = View.VISIBLE
                 noInternetTexView.text = this.getString(R.string.no_internet_message)
-
+                progressBar.visibility = View.GONE
             }
         }
     }
@@ -300,47 +289,55 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     }
 
 
+    override fun onResume() {
+        super.onResume()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+    }
+
     /**
      * Callback received when a permissions request has been completed.
      */
+
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
+        requestCode: Int, permissions: Array<String>,
         grantResults: IntArray
     ) {
         Log.i(TAG, "onRequestPermissionResult")
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             when {
-                // If user interaction was interrupted, the permission request is cancelled and you
-                // receive empty arrays.
-                grantResults.isEmpty() -> Log.i(TAG, "User interaction was cancelled.")
+                grantResults.size <= 0 -> // If user interaction was interrupted, the permission request is cancelled and you
+                    // receive empty arrays.
+                    Log.i(TAG, "User interaction was cancelled.")
+                grantResults[0] == PackageManager.PERMISSION_GRANTED -> // Permission was granted. Kick off the process of building and connecting
+                    // GoogleApiClient.
+                    locationDetector.getLastKnowLocation(this)
+                else -> // Permission denied.
 
-                // Permission granted.
-                (grantResults[0] == PERMISSION_GRANTED) -> locationDetector.getLastKnowLocation(this)
+                    // Notify the user via a SnackBar that they have rejected a core permission for the
+                    // app, which makes the Activity useless. In a real app, core permissions would
+                    // typically be best requested during a welcome-screen flow.
 
-                // Permission denied.
+                    // Additionally, it is important to remember that a permission might have been
+                    // rejected without asking the user for permission (device policy or "Never ask
+                    // again" prompts). Therefore, a user interface affordance is typically implemented
+                    // when permissions are denied. Otherwise, your app could appear unresponsive to
+                    // touches or interactions which have required permissions.
 
-                // Notify the user via a SnackBar that they have rejected a core permission for the
-                // app, which makes the Activity useless. In a real app, core permissions would
-                // typically be best requested during a welcome-screen flow.
-
-                // Additionally, it is important to remember that a permission might have been
-                // rejected without asking the user for permission (device policy or "Never ask
-                // again" prompts). Therefore, a user interface affordance is typically implemented
-                // when permissions are denied. Otherwise, your app could appear unresponsive to
-                // touches or interactions which have required permissions.
-                else -> {
                     viewSnap.showSnackBar(this, R.string.permission_denied_explanation, R.string.settings,
                         View.OnClickListener {
                             // Build intent that displays the App settings screen.
                             val intent = Intent().apply {
                                 action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                                data = Uri.fromParts("package", APPLICATION_ID, null)
+                                data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
                                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
                             }
+
                             startActivity(intent)
                         })
-                }
             }
         }
     }
@@ -371,7 +368,7 @@ class CustomSpinnerAdapter : ArrayAdapter<String> {
     private fun CustomSpinnerView(position: Int, parent: ViewGroup): View {
         //Getting the Layout Inflater Service from the system
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        //Inflating out custom spinner view
+        //Inflating out custom spinner viewz
         val customView = layoutInflater.inflate(R.layout.spinner_item, parent, false)
         //Declaring and initializing the widgets in custom layout
         val textView = customView?.findViewById(R.id.spinner_canteen_name) as? TextView

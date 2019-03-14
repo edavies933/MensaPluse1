@@ -4,8 +4,9 @@ import android.app.Application
 import android.location.Geocoder
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
-
+@Singleton
 class CityNameGeoCoder @Inject constructor(context: Application) :
     ICityNameGeoCoder {
 

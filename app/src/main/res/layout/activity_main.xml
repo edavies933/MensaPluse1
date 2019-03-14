@@ -84,7 +84,7 @@
                     app:layout_constraintBottom_toTopOf="@+id/noInternetTexView">
             </android.support.v4.view.ViewPager>
             <TextView
-                    android:text="TextView"
+                    android:text="@string/setting_up"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" android:id="@+id/infoTextView"
                     app:layout_constraintEnd_toEndOf="@+id/viewpager" android:layout_marginEnd="8dp"
@@ -93,7 +93,7 @@
                     app:layout_constraintTop_toTopOf="@+id/viewpager" android:gravity="center"
                     android:fontFamily="sans-serif-condensed" android:textSize="24sp"/>
             <TextView
-                    android:text="TextView"
+                    android:text="@string/updating_data"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/noInternetTexView" app:layout_constraintEnd_toEndOf="parent"
@@ -102,6 +102,15 @@
                     android:layout_marginBottom="8dp"
                     app:layout_constraintBottom_toBottomOf="parent" android:gravity="bottom|center"
                     android:fontFamily="sans-serif-condensed-light" android:textSize="18sp"/>
+            <ProgressBar
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:id="@+id/progressBar"
+                    app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="@+id/viewpager"
+                    android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="@+id/infoTextView"/>
 
 
         </android.support.constraint.ConstraintLayout>

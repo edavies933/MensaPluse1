@@ -13,6 +13,7 @@ import com.example.emmanueldavies.mensapluse1.data.Meal
 import com.example.emmanueldavies.mensapluse1.domain.interactor.LoadCanteenUseCase
 import com.example.emmanueldavies.mensapluse1.domain.interactor.LoadMealUseCase
 import com.example.emmanueldavies.mensapluse1.domain.model.MenuAtDate
+import com.google.android.gms.common.api.GoogleApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -42,6 +43,8 @@ class MensaViewModel @Inject constructor(
     private lateinit var canteen: Canteen
     private var calendar: Calendar = Calendar.getInstance()
     private var context: Application = application
+
+
 
     fun getCanteenNames(locationData: LocationData) {
         var cityName = geoCoder.convertLatLonToCityName(locationData.Latitude, locationData.Longitude)
