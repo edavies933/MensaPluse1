@@ -100,7 +100,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun  providesIICityNameGeoCoder (context: Application) : ICityNameGeoCoder {
+    fun  providesIICityNameGeoCoder (context: Application ) : ICityNameGeoCoder {
 
         return CityNameGeoCoder(context)
     }

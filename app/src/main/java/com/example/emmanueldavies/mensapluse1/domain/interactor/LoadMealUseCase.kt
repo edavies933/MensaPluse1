@@ -20,7 +20,13 @@ constructor(
     override fun buildUseCaseSingle(menuAtDate: MenuAtDate?): Single<List<Meal>> {
 
         if (menuAtDate!!.hasInternet) {
-            return contentRepository.getMealsByCanteenId(menuAtDate.canteenId, menuAtDate.date).toSingle()
+            return contentRepository.getMealsByCanteenId(menuAtDate.canteenId, menuAtDate.date).map {
+
+                for (meal in it) {
+                    meal.name = meal.name?.trim()
+                }
+                it
+            }.toSingle()
         }
         return contentRepository.getMealDirectlyFromDb(menuAtDate.canteenId, menuAtDate.date).toSingle()
     }

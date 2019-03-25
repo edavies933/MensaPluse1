@@ -11,12 +11,14 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.support.design.widget.BaseTransientBottomBar.LENGTH_INDEFINITE
+import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -38,10 +40,13 @@ import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
 import io.spacenoodles.makingyourappreactive.viewModel.state.Status
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 
 class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
-    MenuListFragment.OnFragmentInteractionListener {
+    MenuListFragment.OnFragmentInteractionListener ,NavigationView.OnNavigationItemSelectedListener{
+
+
 
     @Inject
     lateinit var viewSnap: ViewSnap
@@ -50,6 +55,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     lateinit var mensaAppViewModelFactory: MensaAppViewModelFactory
     lateinit var mensaViewModel: MensaViewModel
     var mainActivityState: MutableLiveData<MainActivityState> = MutableLiveData()
+    private var hasLocationPermission: Boolean = false
 
     var currentTabNumber = 0
 
@@ -87,6 +93,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         }
 
 
+nav_view.setNavigationItemSelectedListener(this);
 
         mensaViewModel = ViewModelProviders.of(this, mensaAppViewModelFactory).get(MensaViewModel::class.java)
 
@@ -100,8 +107,10 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
                 updateView(MainActivityState.noLocationFound())
 
+
             } else {
                 mensaViewModel.getCanteenNames(it)
+                locationDetector.stopListeningToLocationUpdate()
             }
 
         })
@@ -114,6 +123,29 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 this.canteenNames = canteenNames
             }
         })
+    }
+
+    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
+        when (p0.itemId) {
+             R.id.nav_about -> {
+
+                var mapActivityIntent = Intent(this,AboutActivity::class.java)
+                startActivity(mapActivityIntent)
+            }
+
+            R.id.nav_map -> {
+
+            var mapActivityIntent = Intent(this,MapActivity::class.java)
+            startActivity(mapActivityIntent)
+        }
+
+            R.id.nav_canteen -> {
+
+                var mapActivityIntent = Intent(this,MainActivity::class.java)
+                startActivity(mapActivityIntent)
+            }
+        }
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -280,23 +312,8 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             snackBar.show()
         }
 
-        fun dismissSnackBar() {
-            if (snackBar?.isShown) {
-                snackBar.dismiss()
-            }
-        }
-
     }
 
-
-    override fun onResume() {
-        super.onResume()
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
 
     /**
      * Callback received when a permissions request has been completed.
@@ -309,24 +326,23 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         Log.i(TAG, "onRequestPermissionResult")
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE) {
             when {
-                grantResults.size <= 0 -> // If user interaction was interrupted, the permission request is cancelled and you
+                grantResults.isEmpty() -> // If user interaction was interrupted, the permission request is cancelled and you
                     // receive empty arrays.
                     Log.i(TAG, "User interaction was cancelled.")
                 grantResults[0] == PackageManager.PERMISSION_GRANTED -> // Permission was granted. Kick off the process of building and connecting
                     // GoogleApiClient.
-                    locationDetector.getLastKnowLocation(this)
+                {
+
+                    if (!hasLocationPermission) {
+                        locationDetector.getLastKnowLocation(this)
+                        hasLocationPermission = true
+                    }
+
+                }
+
                 else -> // Permission denied.
-
-                    // Notify the user via a SnackBar that they have rejected a core permission for the
-                    // app, which makes the Activity useless. In a real app, core permissions would
-                    // typically be best requested during a welcome-screen flow.
-
-                    // Additionally, it is important to remember that a permission might have been
-                    // rejected without asking the user for permission (device policy or "Never ask
-                    // again" prompts). Therefore, a user interface affordance is typically implemented
-                    // when permissions are denied. Otherwise, your app could appear unresponsive to
-                    // touches or interactions which have required permissions.
-
+                {
+                    hasLocationPermission = false
                     viewSnap.showSnackBar(this, R.string.permission_denied_explanation, R.string.settings,
                         View.OnClickListener {
                             // Build intent that displays the App settings screen.
@@ -338,6 +354,17 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
                             startActivity(intent)
                         })
+                }
+                // Notify the user via a SnackBar that they have rejected a core permission for the
+                // app, which makes the Activity useless. In a real app, core permissions would
+                // typically be best requested during a welcome-screen flow.
+
+                // Additionally, it is important to remember that a permission might have been
+                // rejected without asking the user for permission (device policy or "Never ask
+                // again" prompts). Therefore, a user interface affordance is typically implemented
+                // when permissions are denied. Otherwise, your app could appear unresponsive to
+                // touches or interactions which have required permissions.
+
             }
         }
     }

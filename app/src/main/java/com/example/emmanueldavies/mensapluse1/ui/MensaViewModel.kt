@@ -13,7 +13,6 @@ import com.example.emmanueldavies.mensapluse1.data.Meal
 import com.example.emmanueldavies.mensapluse1.domain.interactor.LoadCanteenUseCase
 import com.example.emmanueldavies.mensapluse1.domain.interactor.LoadMealUseCase
 import com.example.emmanueldavies.mensapluse1.domain.model.MenuAtDate
-import com.google.android.gms.common.api.GoogleApiClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -45,16 +44,24 @@ class MensaViewModel @Inject constructor(
     private var context: Application = application
 
 
-
     fun getCanteenNames(locationData: LocationData) {
-        var cityName = geoCoder.convertLatLonToCityName(locationData.Latitude, locationData.Longitude)
-        if (cityName == null) {
-            state.postValue(MainActivityState.noLocationFound())
-        } else {
-            locationData.cityName = cityName
-            loadCanteenUseCase.execute(CanteenObserver(), locationData)
+        addSub(
 
-        }
+            geoCoder.convertLatLonToCityName(
+                locationData.Latitude,
+                locationData.Longitude
+            )?.subscribeOn(Schedulers.io())
+                ?.observeOn(AndroidSchedulers.mainThread())?.subscribe({ cityName ->
+
+                    locationData.cityName = cityName
+                    loadCanteenUseCase.execute(CanteenObserver(), locationData)
+                },
+                    {
+                        state.postValue(MainActivityState.noLocationFound())
+
+                    })
+
+        )
 
     }
 

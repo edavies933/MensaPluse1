@@ -18,8 +18,9 @@ import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import javax.inject.Inject
+import javax.inject.Singleton
 
-
+@Singleton
 class LocationDetector @Inject constructor() : ILocationDetector, GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -145,7 +146,7 @@ class LocationDetector @Inject constructor() : ILocationDetector, GoogleApiClien
     /**
      * Return the current mainActivityState of the permissions needed.
      */
-    private fun checkPermissions(): Boolean {
+    override fun checkPermissions(): Boolean {
         val permissionState = ActivityCompat.checkSelfPermission(
             activity,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -187,7 +188,9 @@ class LocationDetector @Inject constructor() : ILocationDetector, GoogleApiClien
         }
     }
 
-    fun stopListeningToLocationUpdate() {
+
+
+    override fun stopListeningToLocationUpdate() {
         if (mGoogleApiClient != null) {
 
             if (mGoogleApiClient?.isConnected!!) {

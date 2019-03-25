@@ -11,7 +11,7 @@
     <string name="samplePriceValue">1.59 €</string>
     <string name="canteen">Canteen</string>
     <string name="setting">Setting</string>
-    <string name="price_format">Student: %1$s€ | Employee: %2$s€  \nOthers: %3$s€</string>
+    <string name="price_format">Student: %1$s€ | Employee: %2$s€ \nOthers: %3$s€</string>
     <string name="latitude_label">Latitude: %f</string>
     <string name="longitude_label">Longitude: %f</string>
     <string name="no_location_detected">
@@ -36,5 +36,8 @@
     <string name="title_date_format">E dd-MM-yyyy</string>
     <string name="setting_up">Setting Up</string>
     <string name="updating_data">Updating Data...</string>
+    <string name="map">Map</string>
+
+    <string name="google_maps_key">GOOGLE_MAPS_KEY</string>
 
 </resources>

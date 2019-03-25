@@ -1,6 +1,7 @@
 package com.example.emmanueldavies.mensapluse1.ui
 
 import android.arch.lifecycle.MutableLiveData
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.Meal
 import com.example.emmanueldavies.mensapluse1.databinding.RecyclerViewItemBinding
 import com.example.emmanueldavies.mensapluse1.databinding.SpinnerItemBinding
+import java.util.*
 
 class MealAdapter(var listOfMeals: MutableList<Meal>) : RecyclerView.Adapter<MealAdapter.MealViewHolder>() {
 
@@ -31,7 +33,11 @@ class MealAdapter(var listOfMeals: MutableList<Meal>) : RecyclerView.Adapter<Mea
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Meal) {
+            val rnd = Random()
+            val color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
+
             binding.meal = item
+            binding.colorView.setBackgroundColor(color)
             binding.executePendingBindings()
         }
 
