@@ -144,7 +144,7 @@ class LocationDetector @Inject constructor() : ILocationDetector, GoogleApiClien
     }
 
     /**
-     * Return the current mainActivityState of the permissions needed.
+     * Return the current viewState of the permissions needed.
      */
     override fun checkPermissions(): Boolean {
         val permissionState = ActivityCompat.checkSelfPermission(
@@ -181,7 +181,7 @@ class LocationDetector @Inject constructor() : ILocationDetector, GoogleApiClien
 
         } else {
             // Request permission. It's possible this can be auto answered if device policy
-            // sets the permission in a given mainActivityState or the user denied the permission
+            // sets the permission in a given viewState or the user denied the permission
             // previously and checked "Never ask again".
             Log.i(TAG, "Requesting permission")
             startLocationPermissionRequest()

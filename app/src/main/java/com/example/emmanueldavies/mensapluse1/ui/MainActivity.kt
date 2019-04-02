@@ -18,7 +18,6 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -34,18 +33,17 @@ import com.example.emmanueldavies.mensapluse1.BuildConfig
 import com.example.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
 import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
 import com.example.emmanueldavies.mensapluse1.R
+import com.example.emmanueldavies.mensapluse1.ui.mapView.MapActivity
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
+import io.spacenoodles.makingyourappreactive.viewModel.state.ViewState
 import io.spacenoodles.makingyourappreactive.viewModel.state.Status
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
-import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 
-class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
-    MenuListFragment.OnFragmentInteractionListener ,NavigationView.OnNavigationItemSelectedListener{
-
+open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
+    MenuListFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
 
 
     @Inject
@@ -54,10 +52,8 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     @Inject
     lateinit var mensaAppViewModelFactory: MensaAppViewModelFactory
     lateinit var mensaViewModel: MensaViewModel
-    var mainActivityState: MutableLiveData<MainActivityState> = MutableLiveData()
+    var viewState: MutableLiveData<ViewState> = MutableLiveData()
     private var hasLocationPermission: Boolean = false
-
-    var currentTabNumber = 0
 
 
     companion object {
@@ -93,7 +89,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         }
 
 
-nav_view.setNavigationItemSelectedListener(this);
+        nav_view.setNavigationItemSelectedListener(this);
 
         mensaViewModel = ViewModelProviders.of(this, mensaAppViewModelFactory).get(MensaViewModel::class.java)
 
@@ -105,7 +101,7 @@ nav_view.setNavigationItemSelectedListener(this);
         locationDetector.getLastKnowLocation(this).observe(this, Observer {
             if (it == null) {
 
-                updateView(MainActivityState.noLocationFound())
+                updateView(ViewState.noLocationFound())
 
 
             } else {
@@ -127,21 +123,21 @@ nav_view.setNavigationItemSelectedListener(this);
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when (p0.itemId) {
-             R.id.nav_about -> {
+            R.id.nav_about -> {
 
-                var mapActivityIntent = Intent(this,AboutActivity::class.java)
+                var mapActivityIntent = Intent(this, AboutActivity::class.java)
                 startActivity(mapActivityIntent)
             }
 
             R.id.nav_map -> {
 
-            var mapActivityIntent = Intent(this,MapActivity::class.java)
-            startActivity(mapActivityIntent)
-        }
+                var mapActivityIntent = Intent(this, MapActivity::class.java)
+                startActivity(mapActivityIntent)
+            }
 
             R.id.nav_canteen -> {
 
-                var mapActivityIntent = Intent(this,MainActivity::class.java)
+                var mapActivityIntent = Intent(this, MainActivity::class.java)
                 startActivity(mapActivityIntent)
             }
         }
@@ -173,18 +169,18 @@ nav_view.setNavigationItemSelectedListener(this);
             )
         }
         viewPager.adapter = adapter
-        viewPager.currentItem = currentTabNumber
-        getMealsAtDate(currentTabNumber)
+        viewPager.currentItem = mensaViewModel.currentTabNumber
+        getMealsAtDate(mensaViewModel.currentTabNumber)
 
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(p0: Int, p1: Float, p2: Int) {
             }
 
             override fun onPageSelected(p0: Int) {
-                updateView(MainActivityState.loading())
-                if (currentTabNumber != p0) {
+                updateView(ViewState.loading())
+                if (mensaViewModel.currentTabNumber != p0) {
                     viewPager.invalidate()
-                    currentTabNumber = p0
+                    mensaViewModel.currentTabNumber = p0
                     getMealsAtDate(p0)
                 }
             }
@@ -225,11 +221,13 @@ nav_view.setNavigationItemSelectedListener(this);
 
     private var spinnerOnItemSelectedListener = object : OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            updateView(MainActivityState.loading())
+            updateView(ViewState.loading())
             var canteenName = canteenNames[position]
             mensaViewModel.getMeals(canteenName)
             setupViewPager(viewpager)
             tabLayout.setupWithViewPager(viewpager)
+
+            mensaViewModel.currentCanteen = position
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -245,11 +243,13 @@ nav_view.setNavigationItemSelectedListener(this);
             var spinnerArrayAdapter = CustomSpinnerAdapter(this, R.layout.spinner_item, canteenNames)
             activity.spinner?.adapter = spinnerArrayAdapter
             activity?.spinner?.onItemSelectedListener = spinnerOnItemSelectedListener
+
+            spinner.setSelection(mensaViewModel.currentCanteen)
         }
 
     }
 
-    private fun updateView(state: MainActivityState) {
+    private fun updateView(state: ViewState) {
         when (state.status) {
             Status.LOADING -> {
                 progressBar.visibility = View.VISIBLE

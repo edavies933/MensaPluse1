@@ -1,6 +1,7 @@
 package com.example.emmanueldavies.mensapluse1.rooom
 
 import android.arch.persistence.room.TypeConverter
+import com.example.emmanueldavies.mensapluse1.data.LocationData
 import com.example.emmanueldavies.mensapluse1.data.Prices
 
 class DateTypeConverter {
@@ -48,6 +49,23 @@ class DateTypeConverter {
         fun pricesToStringConverter(prices: Prices): String {
 
             return "Student: ${prices.students}€, Employee: ${prices.employees}€, Others: ${prices.others}€"
+        }
+
+        @TypeConverter
+        @JvmStatic
+        fun cordinatesToLocationDataConverter(coordinate: List<Double>): String {
+            if (coordinate.count() < 1) {
+                return ""
+            }
+            return coordinate[0].toString() + "," + coordinate[1].toString()
+        }
+
+        @TypeConverter
+        @JvmStatic
+        fun LocationDataToCordinatesConverter(locationString: String): List<Double>? {
+
+            var splited = locationString.split(",")
+            return listOf(splited[0].toDouble(), splited[1].toDouble())
         }
     }
 }

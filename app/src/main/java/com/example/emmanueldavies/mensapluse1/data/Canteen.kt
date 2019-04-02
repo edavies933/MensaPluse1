@@ -26,7 +26,6 @@ class Canteen(
     var address: String?,
     @SerializedName("coordinates")
     @Expose
-    @Ignore
     var coordinates: List<Double>?
 
 ){

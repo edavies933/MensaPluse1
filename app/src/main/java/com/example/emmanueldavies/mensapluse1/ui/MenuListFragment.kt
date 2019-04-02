@@ -7,19 +7,14 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
-import android.provider.SyncStateContract.Helpers.update
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.emmanueldavies.mensapluse1.R
 import com.example.emmanueldavies.mensapluse1.databinding.FragmentMenuListBinding
 import com.example.emmanueldavies.mensapluse1.di.Injectable
-import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
-import io.spacenoodles.makingyourappreactive.viewModel.state.Status
-import kotlinx.android.synthetic.main.fragment_menu_list.*
 
 private const val TAB_TITLE = "param2"
 
@@ -73,7 +68,7 @@ class MenuListFragment : Fragment(), Injectable {
 
         initLayout()
 
-        (activity as MainActivity).mainActivityState.reobserve(activity as MainActivity
+        (activity as MainActivity).viewState.reobserve(activity as MainActivity
         ) {
         }
 
@@ -103,7 +98,7 @@ class MenuListFragment : Fragment(), Injectable {
 
     override fun onPause() {
         super.onPause()
-        (activity as MainActivity).mainActivityState.removeObservers(this)
+        (activity as MainActivity).viewState.removeObservers(this)
     }
 
 }

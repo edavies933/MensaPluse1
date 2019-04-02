@@ -18,23 +18,28 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
-import io.spacenoodles.makingyourappreactive.viewModel.state.MainActivityState
+import io.spacenoodles.makingyourappreactive.viewModel.state.ViewState
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class MensaViewModel @Inject constructor(
+@Singleton
+class MensaViewModel  @Inject constructor(
     private var geoCoder: ICityNameGeoCoder,
     private var netWorkManager: INetworkManager,
     private var loadCanteenUseCase: LoadCanteenUseCase,
     private var loadMealUseCase: LoadMealUseCase, application: Application
+
 ) :
     AndroidViewModel(application) {
     private var disposables: CompositeDisposable = CompositeDisposable()
     private var hasInternet = false
     var canteenNames: MutableLiveData<MutableList<String>> = MutableLiveData()
     var canteens: MutableLiveData<List<Canteen>> = MutableLiveData()
-    var state: MutableLiveData<MainActivityState> = MutableLiveData()
+    var state: MutableLiveData<ViewState> = MutableLiveData()
+    var currentTabNumber : Int = 0
+    var currentCanteen: Int  = 0
 
 
     var mealAdapter: MealAdapter =
@@ -57,7 +62,7 @@ class MensaViewModel @Inject constructor(
                     loadCanteenUseCase.execute(CanteenObserver(), locationData)
                 },
                     {
-                        state.postValue(MainActivityState.noLocationFound())
+                        state.postValue(ViewState.noLocationFound())
 
                     })
 
@@ -96,7 +101,7 @@ class MensaViewModel @Inject constructor(
                     hasInternet = internet
                 },
                     {
-                        state.postValue(MainActivityState.error(it))
+                        state.postValue(ViewState.error(it))
                     })
         )
 
@@ -143,9 +148,12 @@ class MensaViewModel @Inject constructor(
     private inner class CanteenObserver : DisposableSingleObserver<List<Canteen>>() {
 
         override fun onSuccess(t: List<Canteen>) {
-            state.postValue(MainActivityState.loading())
+            state.postValue(ViewState.loading())
             canteens.postValue(t.toMutableList())
             var names = mutableListOf<String>()
+            if (t.count()-1 < currentCanteen){
+                currentCanteen = 0
+            }
             for (canteen in t) {
                 names.add(canteen.name!!)
             }
@@ -153,7 +161,7 @@ class MensaViewModel @Inject constructor(
         }
 
         override fun onError(e: Throwable) {
-            state.postValue(MainActivityState.noInternet())
+            state.postValue(ViewState.noInternet())
         }
     }
 
@@ -161,10 +169,10 @@ class MensaViewModel @Inject constructor(
 
         override fun onSuccess(meals: List<Meal>) {
             formatMeals(meals)
-            state.postValue(MainActivityState.success())
+            state.postValue(ViewState.success())
 
             if (!hasInternet) {
-                state.postValue(MainActivityState.noInternet())
+                state.postValue(ViewState.noInternet())
             }
         }
 
@@ -177,14 +185,14 @@ class MensaViewModel @Inject constructor(
 
                         if (hasInternet) {
 
-                            state.postValue(MainActivityState.noDataFound())
+                            state.postValue(ViewState.noDataFound())
                         } else {
-                            state.postValue(MainActivityState.noInternet())
+                            state.postValue(ViewState.noInternet())
 
                         }
                     },
                         {
-                            state.postValue(MainActivityState.error(it))
+                            state.postValue(ViewState.error(it))
                         })
             )
         }

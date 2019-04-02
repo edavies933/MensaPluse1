@@ -1,16 +1,11 @@
 package com.example.emmanueldavies.mensapluse1.di.modules
 
-import com.example.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
-import com.example.emmanueldavies.mensapluse1.LocaionManager.LocationDetector
 import com.example.emmanueldavies.mensapluse1.di.FragmentBuildersModule
-import com.example.emmanueldavies.mensapluse1.rooom.CanteenDao
-import com.example.emmanueldavies.mensapluse1.rooom.MensaDatabase
+import com.example.emmanueldavies.mensapluse1.ui.AboutActivity
 import com.example.emmanueldavies.mensapluse1.ui.MainActivity
-import com.example.emmanueldavies.mensapluse1.ui.MapActivity
+import com.example.emmanueldavies.mensapluse1.ui.mapView.MapActivity
 import dagger.Module
-import dagger.Provides
 import dagger.android.ContributesAndroidInjector
-import javax.inject.Singleton
 
 @Module
 abstract class ActivityModule {
@@ -21,5 +16,7 @@ abstract class ActivityModule {
     @ContributesAndroidInjector
     abstract fun contributeMapActivity(): MapActivity
 
-        // Add bindings for other sub-components here
+
+    @ContributesAndroidInjector
+    abstract fun contributeAboutActivity(): AboutActivity
 }

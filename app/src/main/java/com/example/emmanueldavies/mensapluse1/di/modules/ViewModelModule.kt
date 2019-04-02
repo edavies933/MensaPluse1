@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
 import com.example.emmanueldavies.mensapluse1.ui.MensaViewModel
+import com.example.emmanueldavies.mensapluse1.ui.mapView.MapViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -15,7 +16,13 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(MensaViewModel::class)
-    abstract fun bindUserViewModel(userViewModel: MensaViewModel): ViewModel
+    abstract fun bindMealViewModel(mealViewModel: MensaViewModel): ViewModel
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MapViewModel::class)
+    abstract fun bindMapViewModel(mapViewModel: MapViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: MensaAppViewModelFactory): ViewModelProvider.Factory

@@ -39,5 +39,6 @@
     <string name="map">Map</string>
 
     <string name="google_maps_key">GOOGLE_MAPS_KEY</string>
+    <string name="mapActivityToolBarTitle">Canteens locations</string>
 
 </resources>
