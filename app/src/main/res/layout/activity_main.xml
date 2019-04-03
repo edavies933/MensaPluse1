@@ -58,20 +58,19 @@
 
             ]]>
             <Spinner
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:id="@+id/spinner" app:layout_constraintStart_toStartOf="@+id/toolbar"
                     app:layout_constraintEnd_toEndOf="@+id/toolbar"
                     app:layout_constraintBottom_toBottomOf="@+id/toolbar"
                     app:layout_constraintTop_toTopOf="@+id/toolbar"
                     app:layout_constraintHorizontal_bias="0.49"
-                    android:layout_marginStart="52dp"
-                    style="@style/Platform.Widget.AppCompat.Spinner"
                     app:barrierAllowsGoneWidgets="false"
                     android:dropDownWidth="match_parent"
                     android:gravity="start"
                     android:foregroundGravity="left"
-                    app:layout_constrainedWidth="false"/>
+                    app:layout_constrainedWidth="false"
+                    android:spinnerMode="dialog" android:layout_marginStart="62dp"/>
             <TextView
                     android:text="@string/setting_up"
                     android:layout_width="0dp"
@@ -84,7 +83,7 @@
             <android.support.v4.view.ViewPager
                     android:id="@+id/viewpager"
 
-                    android:layout_width="0dp"
+                    android:layout_width="387dp"
                     android:layout_height="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"

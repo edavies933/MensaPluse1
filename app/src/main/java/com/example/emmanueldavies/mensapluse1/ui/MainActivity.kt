@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
@@ -19,6 +20,7 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBar
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
@@ -36,9 +38,10 @@ import com.example.emmanueldavies.mensapluse1.R
 import com.example.emmanueldavies.mensapluse1.ui.mapView.MapActivity
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
-import io.spacenoodles.makingyourappreactive.viewModel.state.ViewState
 import io.spacenoodles.makingyourappreactive.viewModel.state.Status
+import io.spacenoodles.makingyourappreactive.viewModel.state.ViewState
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import javax.inject.Inject
 
 
@@ -82,13 +85,13 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
         }
-        swiperefresh.setDistanceToTriggerSync(100)
+
         swiperefresh.setOnRefreshListener {
 
             locationDetector.getLastKnowLocation(this)
         }
 
-
+        spinner.background.setColorFilter(resources.getColor(R.color.primary_material_light), PorterDuff.Mode.SRC_ATOP)
         nav_view.setNavigationItemSelectedListener(this);
 
         mensaViewModel = ViewModelProviders.of(this, mensaAppViewModelFactory).get(MensaViewModel::class.java)
@@ -121,6 +124,10 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         })
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when (p0.itemId) {
             R.id.nav_about -> {
@@ -142,6 +149,12 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             }
         }
         return true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        nav_view.menu.getItem(1).isChecked = true
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

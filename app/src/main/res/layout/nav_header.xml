@@ -8,7 +8,7 @@
 
     <ImageView
             android:layout_width="0dp"
-            android:layout_height="wrap_content" app:srcCompat="@drawable/nav_bar_image"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/nav_drawer_header_image"
             android:id="@+id/imageView2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
