@@ -14,6 +14,7 @@
             android:layout_margin="0dp"/>
     <fragment
             android:id="@+id/map"
+            app:cameraZoom="30"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"

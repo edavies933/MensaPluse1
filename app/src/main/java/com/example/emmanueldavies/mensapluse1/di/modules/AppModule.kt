@@ -18,6 +18,8 @@ import com.example.emmanueldavies.newMensaplus.resipotory.*
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -28,14 +30,37 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideGithubService(): MensaAPIInterface {
+    fun provideGithubService(okHttpClient: OkHttpClient): MensaAPIInterface {
         return Retrofit.Builder()
             .baseUrl("https://openmensa.org/api/v2/")
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
             .create(MensaAPIInterface::class.java)
+    }
+
+
+    @Provides
+    @Singleton
+    fun providesHttpLoggingInterceptor () :HttpLoggingInterceptor {
+
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+    }
+
+    @Provides
+    @Singleton
+    fun providesOkHttpClient (httpLoggingInterceptor: HttpLoggingInterceptor) :OkHttpClient {
+
+
+        return OkHttpClient.Builder().apply {
+            addInterceptor(httpLoggingInterceptor)
+        }.build()
+
     }
 
 

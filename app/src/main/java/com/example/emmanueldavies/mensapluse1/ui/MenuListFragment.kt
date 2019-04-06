@@ -101,6 +101,7 @@ class MenuListFragment : Fragment(), Injectable {
         (activity as MainActivity).viewState.removeObservers(this)
     }
 
+
 }
 
 //extension function
@@ -108,3 +109,4 @@ inline fun <T> LiveData<T>.reobserve(owner: LifecycleOwner, crossinline func: (T
     removeObservers(owner)
     observe(owner, Observer<T> { t -> func(t) })
 }
+

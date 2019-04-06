@@ -20,13 +20,14 @@ import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBar
-import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
@@ -41,14 +42,10 @@ import dagger.android.support.HasSupportFragmentInjector
 import io.spacenoodles.makingyourappreactive.viewModel.state.Status
 import io.spacenoodles.makingyourappreactive.viewModel.state.ViewState
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.fragment_menu_list.*
 import javax.inject.Inject
-
-
 open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     MenuListFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
-
-
     @Inject
     lateinit var viewSnap: ViewSnap
     private var canteenNames: MutableList<String> = mutableListOf()
@@ -124,16 +121,14 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         })
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
+
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when (p0.itemId) {
             R.id.nav_about -> {
 
-                var mapActivityIntent = Intent(this, AboutActivity::class.java)
-                startActivity(mapActivityIntent)
+                var aboutActivityIntent = Intent(this, AboutActivity::class.java)
+                startActivity(aboutActivityIntent)
             }
 
             R.id.nav_map -> {
@@ -144,8 +139,8 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
             R.id.nav_canteen -> {
 
-                var mapActivityIntent = Intent(this, MainActivity::class.java)
-                startActivity(mapActivityIntent)
+                var canteenActivityIntent = Intent(this, MainActivity::class.java)
+                startActivity(canteenActivityIntent)
             }
         }
         return true
@@ -167,6 +162,17 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         }
     }
 
+
+
+
+    fun  runAnimations (){
+
+        var context = recyclerView.context
+      var  controller : LayoutAnimationController = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down)
+
+        recyclerView.adapter?.notifyDataSetChanged()
+        recyclerView.scheduleLayoutAnimation()
+    }
     override fun supportFragmentInjector() = dispatchingAndroidInjector
 
     private fun setupViewPager(viewPager: ViewPager) {

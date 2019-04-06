@@ -9,9 +9,8 @@ import retrofit2.http.Query
 
  interface MensaAPIInterface {
 
-
     @GET("canteens")
-    fun getCanteens(@Query("near[lat]") latitude: Double, @Query("near[lng]") longitude: Double): Maybe<List<Canteen>>
+    fun getCanteens(@Query("near[lat]") latitude: Double, @Query("near[lng]") longitude: Double, @Query("near[dist]") distance: Int): Maybe<List<Canteen>>
 
     //    http://openmensa.org/api/v2/canteens/1/days/2018-12-05/meals
 

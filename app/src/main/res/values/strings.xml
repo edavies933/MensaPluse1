@@ -40,5 +40,13 @@
 
     <string name="google_maps_key">GOOGLE_MAPS_KEY</string>
     <string name="mapActivityToolBarTitle">Canteens locations</string>
+    <string name="aboutActivityToolBarTitle">About OpenMensa</string>
+    <string name="unableToGetLastLocation">could not get last know location</string>
+    <string name="couldNotRequestLocationUpdate">could not request location update</string>
+    <string name="version_number_value">1.00000</string>
+    <string name="version_number">version-Number</string>
+    <string name="about_this_app_title">About this app</string>
+    <string name="developer_link">https://www.linkedin.com/in/emmanuel-davies-977154124/</string>
+    <string name="developer_info">Developer Info</string>
 
 </resources>

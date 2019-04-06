@@ -13,7 +13,7 @@ class RemoteDataSource(private var apiInterface: MensaAPIInterface) :
 
     override fun getCanteenDataWithCoordinates(locationData: LocationData) : Maybe<List<Canteen>>{
         //    @GET("canteens?near[lat]=52.393535&near[lng]=13.127814")
-        return apiInterface.getCanteens(locationData.Latitude,locationData.Longitude)
+        return apiInterface.getCanteens(locationData.Latitude,locationData.Longitude,6)
             .subscribeOn(Schedulers.io())    }
 
     override fun  queryForMealsByCanteenId (canteenId : Int, date: String) : Maybe<List<Meal>> {

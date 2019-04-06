@@ -64,7 +64,7 @@ class CanteenAdapter(var listOfCanteen: MutableList<Canteen>) :
 
     override fun onBindViewHolder(viewHolder: CanteenViewHolder, position: Int) {
 
-        binding.canteenCardView.setOnClickListener {
+        binding.spinnerCanteenName.setOnClickListener {
             selectedCanteen.postValue(listOfCanteen[position])
         }
 

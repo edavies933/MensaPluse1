@@ -56,7 +56,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         if (index == it.count() - 1)
                             mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(canteenMarker, 12.0f))
-                        marker?.showInfoWindow()
+//                        marker?.showInfoWindow()
                     }
                 }
             }

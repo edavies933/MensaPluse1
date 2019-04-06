@@ -8,40 +8,26 @@
                 type="com.example.emmanueldavies.mensapluse1.data.Canteen" />
     </data>
 
-    <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:elevation="5dp"
-            android:layout_height="wrap_content"
-            style="@style/CardView.Light"
-            android:id="@+id/canteenCardView" android:layout_marginBottom="0dp"
-            android:layout_margin="0dp" app:cardBackgroundColor="@color/colorPrimary"
-            android:focusableInTouchMode="false" android:touchscreenBlocksFocus="false" android:clipChildren="true"
-            android:clickable="false" android:focusable="auto" android:layout_marginTop="8dp">
 
-        <android.support.constraint.ConstraintLayout
-                tools:ignore="MergeRootFrame"
+
+        <LinearLayout
                 android:layout_height="wrap_content"
                 tools:context=".ui.MainActivity" android:layout_width="match_parent" android:clickable="false"
-                android:clipChildren="true" android:focusableInTouchMode="false" android:touchscreenBlocksFocus="false">
+                android:clipChildren="true" android:focusableInTouchMode="false" android:touchscreenBlocksFocus="false"
+                android:background="@color/colorPrimary">
 
 
             <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinner_canteen_name"
                     android:textColor="@color/common_google_signin_btn_text_dark_default"
                     android:fontFamily="sans-serif-condensed" android:textSize="18sp"
-                    android:text="@{canteen.name}"
                     android:clickable="false" android:focusableInTouchMode="false" android:selectAllOnFocus="false"
                     android:linksClickable="false" android:longClickable="false"
-                    android:gravity="center|start"
+                    android:gravity="start"
                     android:paddingTop="0dp"
-                    android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="8dp"/>
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v7.widget.CardView>
+                    android:foregroundGravity="left" android:layout_margin="8dp"/>
+        </LinearLayout>
 </layout>
 
-        <!--android:text="hhhhhdhdhdhddd dddddd dddddd dd hhhhhdhdhdhddd dddddd dddddd dd"/>-->

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.util.Log
 import android.view.View
+import com.example.emmanueldavies.mensapluse1.R
 import com.example.emmanueldavies.mensapluse1.data.LocationData
 import com.example.emmanueldavies.mensapluse1.ui.MainActivity
 import com.google.android.gms.common.ConnectionResult
@@ -97,7 +98,7 @@ class LocationDetector @Inject constructor() : ILocationDetector, GoogleApiClien
         mLocationRequest = LocationRequest.create()?.apply {
             interval = UPDATE_INTERVAL
             fastestInterval = FASTEST_UPDATE_INTERVAL
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
             maxWaitTime = MAX_WAIT_TIME
         }
 
@@ -115,7 +116,7 @@ class LocationDetector @Inject constructor() : ILocationDetector, GoogleApiClien
 
                     locationLifeData.postValue(locationData)
                 } else {
-                    Log.i(TAG, "could not get last know location")
+                    Log.i(TAG, activity.getString(R.string.unableToGetLastLocation))
                     buildGoogleApiClient(activity)
 
                 }
@@ -130,7 +131,7 @@ class LocationDetector @Inject constructor() : ILocationDetector, GoogleApiClien
             )
         } catch (e: SecurityException) {
             e.printStackTrace()
-            Log.i(TAG, "could not request location update $e")
+            Log.i(TAG, activity.getString(R.string.couldNotRequestLocationUpdate) + " $e")
 
         }
 
