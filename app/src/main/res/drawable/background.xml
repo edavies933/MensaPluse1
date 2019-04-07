@@ -5,7 +5,9 @@
 
     <item>
         <bitmap android:src="@drawable/open_mensa_logo"
-                android:gravity="center" />
+                android:gravity="center"
+                
+        />
 
     </item>
 

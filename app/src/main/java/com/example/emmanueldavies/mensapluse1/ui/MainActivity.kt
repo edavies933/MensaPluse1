@@ -260,6 +260,7 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
         if (canteenNames != null) {
             var spinnerArrayAdapter = CustomSpinnerAdapter(this, R.layout.spinner_item, canteenNames)
+
             activity.spinner?.adapter = spinnerArrayAdapter
             activity?.spinner?.onItemSelectedListener = spinnerOnItemSelectedListener
 
