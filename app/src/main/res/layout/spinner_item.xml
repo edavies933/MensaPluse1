@@ -25,9 +25,8 @@
             android:textAlignment="inherit"
             android:fontFamily="sans-serif-condensed" android:textSize="18sp"
             android:selectAllOnFocus="false"
-            android:gravity="start"
+            android:gravity="fill"
             android:foregroundGravity="left"
-            android:layout_marginTop="15dp"
             android:paddingStart="8dp"/>
     <!--</LinearLayout>-->
 </layout>

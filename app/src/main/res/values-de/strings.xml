@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="canteen">Kantine</string>
+    <string name="setting">Setting</string>
+    <string name="map">Karte</string>
+
+    <string name="price_format">Studenten: %1$s€ | Mitarbeiter: %2$s€ \nGast: %3$s€</string>
+    <string name="no_location_detected">
+        Kein Standort gefunden Stellen Sie sicher, dass der Standort auf dem Gerät aktiviert ist.
+    </string>
+    <string name="permission_denied_explanation">
+        Die Genehmigung wurde verweigert, ist jedoch für die Kernfunktionalität erforderlich.
+    </string>
+    <string name="permission_rationale">
+        Für die Kernfunktionalität ist eine Standortberechtigung erforderlich
+    </string>
+    <string name="no_internet_message">Sie sind offline. Bitte verbinden Sie sich mit dem Internet, um aktualisierte
+        Daten zu erhalten.
+    </string>
+        
+    <string name="no_meal">Leider sind an diesem Tag keine Mahlzeiten verfügbar</string>
+    <string name="todays_menu_title">Heutiges Speisekarte</string>
+    <string name="tomorrow_menu_title">Speisekarte on von morgen</string>
+    <string name="menu_on">Speisekarte an" "</string>
+    <string name="setting_up">Daten einrichten...</string>
+    <string name="updating_data">Aktualisieren von Daten...</string>
+
+    <string name="mapActivityToolBarTitle">Kantinenstandorte</string>
+    <string name="aboutActivityToolBarTitle">Über OpenMensa</string>
+    <string name="unableToGetLastLocation">konnte den letzten bekannten Ort nicht bekommen</string>
+    <string name="couldNotRequestLocationUpdate">konnte keine Standortaktualisierung anfordern</string>
+    <string name="version_number">Versions-Nummer</string>
+    <string name="about_this_app_title">über diese App</string>
+    <string name="developer_info">Entwicklerinfo</string>
+
+</resources>
