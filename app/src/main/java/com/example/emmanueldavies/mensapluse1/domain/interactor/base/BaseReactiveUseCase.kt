@@ -17,8 +17,8 @@
 
 package com.example.emmanueldavies.mensapluse1.domain.interactor.base
 
-import com.stepstone.reactiveusecasessample.domain.executor.PostExecutionThread
-import com.stepstone.reactiveusecasessample.domain.executor.ThreadExecutor
+import com.usecase.reactiveusecasessample.domain.executor.PostExecutionThread
+import com.usecase.reactiveusecasessample.domain.executor.ThreadExecutor
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

@@ -5,6 +5,7 @@ import com.example.emmanueldavies.mensapluse1.data.Canteen
 import io.reactivex.Maybe
 
 @Dao
+@TypeConverters(DateTypeConverter::class)
 interface  CanteenDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -1,4 +1,4 @@
-package com.example.emmanueldavies.mensapluse1
+package com.example.emmanueldavies.mensapluse1.di
 
 import android.app.Activity
 import android.app.Application

@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.example.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
-import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
+import com.example.emmanueldavies.mensapluse1.Utility.MensaAppViewModelFactory
 import com.example.emmanueldavies.mensapluse1.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

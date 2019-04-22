@@ -1,7 +1,7 @@
 package com.example.emmanueldavies.mensapluse1.di.component
 
 import android.app.Application
-import com.example.emmanueldavies.mensapluse1.MensaApplication
+import com.example.emmanueldavies.mensapluse1.di.MensaApplication
 import com.example.emmanueldavies.mensapluse1.di.modules.ActivityModule
 import com.example.emmanueldavies.mensapluse1.di.modules.AppModule
 import com.example.emmanueldavies.mensapluse1.di.modules.ThreadModule

@@ -18,7 +18,7 @@
  * Copied from https://github.com/android10/Android-CleanArchitecture and converted to Kotlin.
  */
 
-package com.stepstone.reactiveusecasessample.domain.executor
+package com.usecase.reactiveusecasessample.domain.executor
 
 import io.reactivex.Scheduler
 

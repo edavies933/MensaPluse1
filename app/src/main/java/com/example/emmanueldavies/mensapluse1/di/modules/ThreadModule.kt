@@ -17,11 +17,10 @@
 
 package com.example.emmanueldavies.mensapluse1.di.modules
 
-import android.app.Application
 import com.example.emmanueldavies.mensapluse1.presentation.UIThread
-import com.stepstone.reactiveusecasessample.data.executor.JobExecutor
-import com.stepstone.reactiveusecasessample.domain.executor.PostExecutionThread
-import com.stepstone.reactiveusecasessample.domain.executor.ThreadExecutor
+import com.usecase.reactiveusecasessample.data.executor.JobExecutor
+import com.usecase.reactiveusecasessample.domain.executor.PostExecutionThread
+import com.usecase.reactiveusecasessample.domain.executor.ThreadExecutor
 import dagger.Binds
 import dagger.Module
 

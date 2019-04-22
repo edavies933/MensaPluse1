@@ -1,4 +1,4 @@
-package com.example.emmanueldavies.mensapluse1.ui
+package com.example.emmanueldavies.mensapluse1.Utility
 
 import android.arch.lifecycle.MutableLiveData
 import android.graphics.Color

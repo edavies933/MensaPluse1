@@ -18,8 +18,8 @@
 package com.example.emmanueldavies.mensapluse1.domain.interactor.base
 
 import com.example.emmanueldavies.mensapluse1.internal.rx.EmptySingleObserver
-import com.stepstone.reactiveusecasessample.domain.executor.PostExecutionThread
-import com.stepstone.reactiveusecasessample.domain.executor.ThreadExecutor
+import com.usecase.reactiveusecasessample.domain.executor.PostExecutionThread
+import com.usecase.reactiveusecasessample.domain.executor.ThreadExecutor
 import io.reactivex.Single
 import io.reactivex.observers.DisposableSingleObserver
 

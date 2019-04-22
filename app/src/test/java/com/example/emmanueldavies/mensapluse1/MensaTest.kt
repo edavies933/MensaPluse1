@@ -10,9 +10,8 @@ class MensaTest {
     @Test
     fun testListOfStringToSingleStringConverter() {
 
-        var typeConverter = DateTypeConverter()
 
-        var singleString = typeConverter.notesToStringConverter(listOf("a", "b", "c"))
+        var singleString =  DateTypeConverter.notesToStringConverter(listOf("a", "b", "c"))
 
         Assert.assertEquals("string is not properly formatted", "a, b, c", singleString)
 
@@ -21,9 +20,8 @@ class MensaTest {
     @Test
     fun singleStringToTestListOfStringConverter() {
 
-        var typeConverter = DateTypeConverter()
 
-        var singleString = typeConverter.stringToNoteConverter("a, b, c")
+        var singleString =  DateTypeConverter.stringToNoteConverter("a, b, c")
 
         Assert.assertEquals("string is not properly formatted", "a", singleString[0])
         Assert.assertEquals("string is not properly formatted", "b", singleString[1])
@@ -34,9 +32,8 @@ class MensaTest {
     @Test
     fun testStringToPriceConverter_ShouldConvertASingleStringToAPriceObject() {
 
-        var typeConverter = DateTypeConverter()
         var singleString = "Student: 2.22€, Employee: 3.33€, Others: 4.44€"
-        var convertedPrices = typeConverter.stringToPricesConvert(singleString)
+        var convertedPrices =  DateTypeConverter.stringToPricesConvert(singleString)
 
         Assert.assertEquals("2.22", convertedPrices.students)
         Assert.assertEquals("3.33", convertedPrices.employees)
@@ -46,11 +43,9 @@ class MensaTest {
 
     @Test
     fun testPricesToStringConverter_ShouldCovertPriceObjectToASingleString(){
-        var typeConverter = DateTypeConverter()
-        var singleString = "Student: 2.22€, Employee: 3.33€, Others: 4.44€"
 
         var prices = Prices("2.22","3.33", others = "4.44")
-        var convertedPrices = typeConverter.pricesToStringConverter(prices)
+        var convertedPrices =  DateTypeConverter.pricesToStringConverter(prices)
 
         Assert.assertEquals("Student: 2.22€, Employee: 3.33€, Others: 4.44€", convertedPrices)
 

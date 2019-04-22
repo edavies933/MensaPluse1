@@ -18,9 +18,9 @@
  * Copied from https://github.com/android10/Android-CleanArchitecture and converted to Kotlin.
  */
 
-package com.stepstone.reactiveusecasessample.data.executor
+package com.usecase.reactiveusecasessample.data.executor
 
-import com.stepstone.reactiveusecasessample.domain.executor.ThreadExecutor
+import com.usecase.reactiveusecasessample.domain.executor.ThreadExecutor
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import javax.inject.Inject

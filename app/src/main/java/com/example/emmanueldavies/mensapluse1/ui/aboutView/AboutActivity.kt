@@ -1,4 +1,4 @@
-package com.example.emmanueldavies.mensapluse1.ui
+package com.example.emmanueldavies.mensapluse1.ui.aboutView
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.emmanueldavies.mensapluse1.BuildConfig

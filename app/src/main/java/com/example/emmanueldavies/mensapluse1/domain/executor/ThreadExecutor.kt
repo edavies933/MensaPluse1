@@ -18,13 +18,13 @@
  * Copied from https://github.com/android10/Android-CleanArchitecture and converted to Kotlin.
  */
 
-package com.stepstone.reactiveusecasessample.domain.executor
+package com.usecase.reactiveusecasessample.domain.executor
 
 import java.util.concurrent.Executor
 
 /**
  * Executor implementation can be based on different frameworks or techniques of asynchronous
  * execution, but every implementation will execute the
- * [com.stepstone.reactiveusecasessample.domain.interactor.BaseReactiveUseCase] out of the UI thread.
+ * [com.usecase.reactiveusecasessample.domain.interactor.BaseReactiveUseCase] out of the UI thread.
  */
 interface ThreadExecutor : Executor

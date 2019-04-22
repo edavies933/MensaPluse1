@@ -1,4 +1,4 @@
-package com.example.emmanueldavies.mensapluse1.ui
+package com.example.emmanueldavies.mensapluse1.ui.MensaView
 
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
@@ -34,8 +34,11 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.emmanueldavies.mensapluse1.BuildConfig
 import com.example.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
-import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
+import com.example.emmanueldavies.mensapluse1.Utility.MensaAppViewModelFactory
 import com.example.emmanueldavies.mensapluse1.R
+import com.example.emmanueldavies.mensapluse1.ui.MensaViewModel
+import com.example.emmanueldavies.mensapluse1.ui.MenuListFragment
+import com.example.emmanueldavies.mensapluse1.ui.aboutView.AboutActivity
 import com.example.emmanueldavies.mensapluse1.ui.mapView.MapActivity
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -183,7 +186,11 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
                 .substring(0, mensaViewModel.getFormattedTitleDate(i).length - TRAILING_CHARACTER)
 
             adapter.addFragment(
-                MenuListFragment.newInstance(mensaViewModel.getFormattedDayName(i)),
+                MenuListFragment.newInstance(
+                    mensaViewModel.getFormattedDayName(
+                        i
+                    )
+                ),
                 formattedDate
             )
         }
@@ -259,7 +266,11 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     private fun updateSpinnerTitles(activity: MainActivity, canteenNames: List<String>?) {
 
         if (canteenNames != null) {
-            var spinnerArrayAdapter = CustomSpinnerAdapter(this, R.layout.spinner_item, canteenNames)
+            var spinnerArrayAdapter = CustomSpinnerAdapter(
+                this,
+                R.layout.spinner_item,
+                canteenNames
+            )
 
             activity.spinner?.adapter = spinnerArrayAdapter
             activity?.spinner?.onItemSelectedListener = spinnerOnItemSelectedListener

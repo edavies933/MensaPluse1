@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import com.example.emmanueldavies.mensapluse1.R
 import com.example.emmanueldavies.mensapluse1.databinding.FragmentMenuListBinding
 import com.example.emmanueldavies.mensapluse1.di.Injectable
+import com.example.emmanueldavies.mensapluse1.ui.MensaView.MainActivity
 
 private const val TAB_TITLE = "param2"
 

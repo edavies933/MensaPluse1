@@ -1,4 +1,4 @@
-package com.example.emmanueldavies.mensapluse1
+package com.example.emmanueldavies.mensapluse1.Utility
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider

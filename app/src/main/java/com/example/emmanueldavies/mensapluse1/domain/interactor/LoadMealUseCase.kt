@@ -4,8 +4,8 @@ import com.example.emmanueldavies.mensapluse1.data.Meal
 import com.example.emmanueldavies.mensapluse1.data.resipotory.IRepository
 import com.example.emmanueldavies.mensapluse1.domain.interactor.base.SingleUseCase
 import com.example.emmanueldavies.mensapluse1.domain.model.MenuAtDate
-import com.stepstone.reactiveusecasessample.domain.executor.PostExecutionThread
-import com.stepstone.reactiveusecasessample.domain.executor.ThreadExecutor
+import com.usecase.reactiveusecasessample.domain.executor.PostExecutionThread
+import com.usecase.reactiveusecasessample.domain.executor.ThreadExecutor
 import io.reactivex.Single
 import javax.inject.Inject
 

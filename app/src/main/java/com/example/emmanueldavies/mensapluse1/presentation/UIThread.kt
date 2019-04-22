@@ -20,7 +20,7 @@
 
 package com.example.emmanueldavies.mensapluse1.presentation
 
-import com.stepstone.reactiveusecasessample.domain.executor.PostExecutionThread
+import com.usecase.reactiveusecasessample.domain.executor.PostExecutionThread
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject

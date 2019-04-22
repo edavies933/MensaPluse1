@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:orientation="vertical"
             android:layout_height="match_parent"
-            tools:context=".ui.MainActivity"
+            tools:context=".ui.MensaView.MainActivity"
             android:background="@color/common_google_signin_btn_text_dark_default">
 
         <TextView
@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:orientation="vertical"
                 android:layout_height="match_parent"
-                tools:context=".ui.MainActivity"
+                tools:context=".ui.MensaView.MainActivity"
                 android:background="@color/common_google_signin_btn_text_light_disabled"
         >
 

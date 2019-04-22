@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData
 import com.example.emmanueldavies.mensapluse1.R
 import com.example.emmanueldavies.mensapluse1.Utility.ICityNameGeoCoder
 import com.example.emmanueldavies.mensapluse1.Utility.INetworkManager
+import com.example.emmanueldavies.mensapluse1.Utility.MealAdapter
 import com.example.emmanueldavies.mensapluse1.data.Canteen
 import com.example.emmanueldavies.mensapluse1.data.LocationData
 import com.example.emmanueldavies.mensapluse1.data.Meal

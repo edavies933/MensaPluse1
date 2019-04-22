@@ -2,7 +2,7 @@ package com.example.emmanueldavies.mensapluse1.di.modules
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.example.emmanueldavies.mensapluse1.MensaAppViewModelFactory
+import com.example.emmanueldavies.mensapluse1.Utility.MensaAppViewModelFactory
 import com.example.emmanueldavies.mensapluse1.ui.MensaViewModel
 import com.example.emmanueldavies.mensapluse1.ui.mapView.MapViewModel
 import dagger.Binds
