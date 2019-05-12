@@ -4,7 +4,7 @@
 
         <variable
                 name="canteen"
-                type="com.example.emmanueldavies.mensapluse1.data.Canteen"/>
+                type="com.emmanueldavies.mensapluse1.data.Canteen"/>
     </data>
 
 
