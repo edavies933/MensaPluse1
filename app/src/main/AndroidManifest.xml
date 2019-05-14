@@ -17,7 +17,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 
-            <activity android:name=".ui.SplashActivity" android:theme="@style/SplashTheme">
+            <activity android:name=".presentation.ui.SplashActivity" android:theme="@style/SplashTheme">
                 <intent-filter>
                     <action android:name="android.intent.action.MAIN" />
                     <category android:name="android.intent.category.LAUNCHER" />
@@ -34,11 +34,11 @@
                 android:name="com.google.android.maps.v2.API_KEY"
                 android:value="AIzaSyCRTQeocuQMTP1TawBM3EnLtY8zaQcKxxE"/>
 
-        <activity android:name=".ui.mapView.MapActivity">
+        <activity android:name=".presentation.ui.mapView.MapActivity">
         </activity>
-        <activity android:name=".ui.MensaView.MainActivity">
+        <activity android:name=".presentation.ui.MensaView.MainActivity">
         </activity>
-        <activity android:name=".ui.aboutView.AboutActivity">
+        <activity android:name=".presentation.ui.aboutView.AboutActivity">
         </activity>
     </application>
 

@@ -17,7 +17,7 @@ class MensaApplication : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
        AppInjector.init(this)
-//        DaggerAppComponentxx.builder().application(this).build().inject(this)
+//        DaggerAppComponent.builder().application(this).build().inject(this)
 
     }
 

@@ -5,7 +5,7 @@ import android.support.test.InstrumentationRegistry
 import com.emmanueldavies.mensapluse1.data.Canteen
 import com.emmanueldavies.mensapluse1.data.Meal
 import com.emmanueldavies.mensapluse1.data.Prices
-import com.emmanueldavies.mensapluse1.rooom.MensaDatabase
+import com.emmanueldavies.mensapluse1.data.rooom.MensaDatabase
 import io.reactivex.internal.operators.maybe.MaybeObserveOn
 import org.junit.After
 import org.junit.Assert.assertEquals

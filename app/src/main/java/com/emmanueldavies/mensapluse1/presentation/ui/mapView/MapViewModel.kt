@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.ui.mapView
+package com.emmanueldavies.mensapluse1.presentation.ui.mapView
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel

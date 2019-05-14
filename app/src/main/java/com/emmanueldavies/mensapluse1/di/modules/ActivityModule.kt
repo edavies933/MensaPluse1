@@ -1,10 +1,10 @@
 package com.emmanueldavies.mensapluse1.di.modules
 
 import com.emmanueldavies.mensapluse1.di.FragmentBuildersModule
-import com.emmanueldavies.mensapluse1.ui.aboutView.AboutActivity
-import com.emmanueldavies.mensapluse1.ui.MensaView.MainActivity
-import com.emmanueldavies.mensapluse1.ui.SplashActivity
-import com.emmanueldavies.mensapluse1.ui.mapView.MapActivity
+import com.emmanueldavies.mensapluse1.presentation.ui.aboutView.AboutActivity
+import com.emmanueldavies.mensapluse1.presentation.ui.MensaView.MainActivity
+import com.emmanueldavies.mensapluse1.presentation.ui.SplashActivity
+import com.emmanueldavies.mensapluse1.presentation.ui.mapView.MapActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

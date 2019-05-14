@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.ui
+package com.emmanueldavies.mensapluse1.presentation.ui
 
 import android.annotation.SuppressLint
 import android.app.Application
@@ -51,22 +51,35 @@ class MensaViewModel  @Inject constructor(
 
 
     fun getCanteenNames(locationData: LocationData) {
+
         addSub(
+            netWorkManager.hasInternetConnection()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe({ internet ->
 
-            geoCoder.convertLatLonToCityName(
-                locationData.Latitude,
-                locationData.Longitude
-            )?.subscribeOn(Schedulers.io())
-                ?.observeOn(AndroidSchedulers.mainThread())?.subscribe({ cityName ->
+                    if (internet) {
 
-                    locationData.cityName = cityName
-                    loadCanteenUseCase.execute(CanteenObserver(), locationData)
+                        geoCoder.convertLatLonToCityName(
+                            locationData.Latitude,
+                            locationData.Longitude
+                        )?.subscribeOn(Schedulers.io())
+                            ?.observeOn(AndroidSchedulers.mainThread())?.subscribe({ cityName ->
+
+                                locationData.cityName = cityName
+                                loadCanteenUseCase.execute(CanteenObserver(), locationData)
+                            },
+                                {
+                                    state.postValue(ViewState.noLocationFound())
+
+                                })
+                    } else {
+                        state.postValue(ViewState.noInternet())
+                    }
+                    hasInternet = internet
                 },
                     {
-                        state.postValue(ViewState.noLocationFound())
-
+                        state.postValue(ViewState.error(it))
                     })
-
         )
 
     }
@@ -148,21 +161,29 @@ class MensaViewModel  @Inject constructor(
 
     private inner class CanteenObserver : DisposableSingleObserver<List<Canteen>>() {
 
-        override fun onSuccess(t: List<Canteen>) {
+        override fun onSuccess(canteenList: List<Canteen>) {
             state.postValue(ViewState.loading())
-            canteens.postValue(t.toMutableList())
+            canteens.postValue(canteenList.toMutableList())
             var names = mutableListOf<String>()
-            if (t.count()-1 < currentCanteen){
+            if (canteenList.count()-1 < currentCanteen){
                 currentCanteen = 0
             }
-            for (canteen in t) {
+            for (canteen in canteenList) {
                 names.add(canteen.name!!)
             }
             canteenNames.postValue(names)
         }
 
         override fun onError(e: Throwable) {
-            state.postValue(ViewState.noInternet())
+
+            if (!hasInternet) {
+                state.postValue(ViewState.noInternet())
+            } else
+
+            {
+                state.postValue(ViewState.noDataFound())
+
+            }
         }
     }
 

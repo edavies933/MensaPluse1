@@ -19,8 +19,8 @@ package com.emmanueldavies.mensapluse1.domain.interactor
 
 import com.emmanueldavies.mensapluse1.data.Canteen
 import com.emmanueldavies.mensapluse1.data.LocationData
-import com.emmanueldavies.mensapluse1.domain.interactor.base.SingleUseCase
 import com.emmanueldavies.mensapluse1.data.resipotory.IRepository
+import com.emmanueldavies.mensapluse1.domain.interactor.base.SingleUseCase
 import com.usecase.reactiveusecasessample.domain.executor.PostExecutionThread
 import com.usecase.reactiveusecasessample.domain.executor.ThreadExecutor
 import io.reactivex.Single
@@ -34,9 +34,15 @@ constructor(
     private val contentRepository: IRepository
 ) : SingleUseCase<List<Canteen>, LocationData>(threadExecutor, postExecutionThread) {
 
-    override fun buildUseCaseSingle(locationData: LocationData?): Single<List<Canteen>> {
+    private var MaximumNumberOfCanteens: Int = 10
 
-        return contentRepository.getCanteens(locationData!!).toSingle()
+    override fun buildUseCaseSingle(locationData: LocationData?): Single<List<Canteen>> {
+        return contentRepository.getCanteens(locationData!!).toSingle().flatMap {
+            if (it.count() > MaximumNumberOfCanteens-1) Single.just(it.subList(0, MaximumNumberOfCanteens))
+            else Single.just(it)
+
+        }
+
     }
 }
 

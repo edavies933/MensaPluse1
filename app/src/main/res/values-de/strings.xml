@@ -19,7 +19,7 @@
         Daten zu erhalten.
     </string>
         
-    <string name="no_meal">Leider sind an diesem Tag keine Mahlzeiten verfügbar</string>
+    <string name="no_canteens_around_location">Leider gibt es an Ihrem aktuellen Standort keine Kantinen. Versuchen Sie es später erneut, wenn Sie an einen anderen Standort umziehen</string>
     <string name="todays_menu_title">Heutiges Speisekarte</string>
     <string name="tomorrow_menu_title">Speisekarte on von morgen</string>
     <string name="menu_on">Speisekarte an" "</string>

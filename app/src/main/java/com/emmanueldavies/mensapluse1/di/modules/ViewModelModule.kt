@@ -3,8 +3,8 @@ package com.emmanueldavies.mensapluse1.di.modules
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.emmanueldavies.mensapluse1.Utility.MensaAppViewModelFactory
-import com.emmanueldavies.mensapluse1.ui.MensaViewModel
-import com.emmanueldavies.mensapluse1.ui.mapView.MapViewModel
+import com.emmanueldavies.mensapluse1.presentation.ui.MensaViewModel
+import com.emmanueldavies.mensapluse1.presentation.ui.mapView.MapViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

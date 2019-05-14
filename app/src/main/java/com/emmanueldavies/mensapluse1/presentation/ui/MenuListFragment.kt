@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.ui
+package com.emmanueldavies.mensapluse1.presentation.ui
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
@@ -15,7 +15,7 @@ import android.view.ViewGroup
 import com.emmanueldavies.mensapluse1.R
 import com.emmanueldavies.mensapluse1.databinding.FragmentMenuListBinding
 import com.emmanueldavies.mensapluse1.di.Injectable
-import com.emmanueldavies.mensapluse1.ui.MensaView.MainActivity
+import com.emmanueldavies.mensapluse1.presentation.ui.MensaView.MainActivity
 
 private const val TAB_TITLE = "param2"
 

@@ -14,7 +14,7 @@ import android.view.ViewGroup
 import android.widget.Spinner
 import android.widget.TextView
 import com.emmanueldavies.mensapluse1.R
-import com.emmanueldavies.mensapluse1.ui.MensaView.MainActivity
+import com.emmanueldavies.mensapluse1.presentation.ui.MensaView.MainActivity
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf

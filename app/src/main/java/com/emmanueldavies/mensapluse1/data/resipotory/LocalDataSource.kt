@@ -2,8 +2,8 @@ package com.emmanueldavies.newMensaplus.resipotory
 
 import com.emmanueldavies.mensapluse1.data.Canteen
 import com.emmanueldavies.mensapluse1.data.Meal
-import com.emmanueldavies.mensapluse1.rooom.CanteenDao
-import com.emmanueldavies.mensapluse1.rooom.MensaDao
+import com.emmanueldavies.mensapluse1.data.rooom.CanteenDao
+import com.emmanueldavies.mensapluse1.data.rooom.MensaDao
 import io.reactivex.Maybe
 
 

@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.rooom
+package com.emmanueldavies.mensapluse1.data.rooom
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.RoomDatabase

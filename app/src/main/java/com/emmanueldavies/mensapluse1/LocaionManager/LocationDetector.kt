@@ -11,7 +11,7 @@ import android.util.Log
 import android.view.View
 import com.emmanueldavies.mensapluse1.R
 import com.emmanueldavies.mensapluse1.data.LocationData
-import com.emmanueldavies.mensapluse1.ui.MensaView.MainActivity
+import com.emmanueldavies.mensapluse1.presentation.ui.MensaView.MainActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient

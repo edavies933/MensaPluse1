@@ -10,7 +10,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import com.emmanueldavies.mensapluse1.di.component.DaggerAppComponentxx
+import com.emmanueldavies.mensapluse1.di.component.DaggerAppComponent
 import dagger.android.support.AndroidSupportInjection
 
 /**
@@ -18,7 +18,7 @@ import dagger.android.support.AndroidSupportInjection
  */
 object AppInjector {
     fun init(mensaApp: MensaApplication) {
-        DaggerAppComponentxx.builder().application(mensaApp).build().inject(mensaApp)
+        DaggerAppComponent.builder().application(mensaApp).build().inject(mensaApp)
 
         mensaApp.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
                 override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {

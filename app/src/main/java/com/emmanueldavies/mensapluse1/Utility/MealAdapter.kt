@@ -29,7 +29,7 @@ class MealAdapter(var listOfMeals: MutableList<Meal>) : RecyclerView.Adapter<Mea
         notifyDataSetChanged()
     }
 
-    class MealViewHolder(private val binding: com.emmanueldavies.mensapluse1.databinding.RecyclerViewItemBinding) :
+    class MealViewHolder(private val binding: RecyclerViewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Meal) {
@@ -80,7 +80,7 @@ class CanteenAdapter(var listOfCanteen: MutableList<Canteen>) :
         notifyDataSetChanged()
     }
 
-    class CanteenViewHolder(private val binding: com.emmanueldavies.mensapluse1.databinding.SpinnerItemBinding) :
+    class CanteenViewHolder(private val binding: SpinnerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Canteen) {

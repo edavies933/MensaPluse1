@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.ui.MensaView
+package com.emmanueldavies.mensapluse1.presentation.ui.MensaView
 
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
@@ -36,12 +36,14 @@ import com.emmanueldavies.mensapluse1.BuildConfig
 import com.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
 import com.emmanueldavies.mensapluse1.Utility.MensaAppViewModelFactory
 import com.emmanueldavies.mensapluse1.R
-import com.emmanueldavies.mensapluse1.ui.MensaViewModel
-import com.emmanueldavies.mensapluse1.ui.MenuListFragment
-import com.emmanueldavies.mensapluse1.ui.aboutView.AboutActivity
-import com.emmanueldavies.mensapluse1.ui.mapView.MapActivity
+import com.emmanueldavies.mensapluse1.presentation.ui.MensaViewModel
+import com.emmanueldavies.mensapluse1.presentation.ui.MenuListFragment
+import com.emmanueldavies.mensapluse1.presentation.ui.aboutView.AboutActivity
+import com.emmanueldavies.mensapluse1.presentation.ui.mapView.MapActivity
+import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import io.reactivex.subjects.BehaviorSubject
 import io.spacenoodles.makingyourappreactive.viewModel.state.Status
 import io.spacenoodles.makingyourappreactive.viewModel.state.ViewState
 import kotlinx.android.synthetic.main.activity_main.*
@@ -87,7 +89,7 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
         }
 
         swiperefresh.setOnRefreshListener {
-
+            infoTextView.visibility = View.GONE
             locationDetector.getLastKnowLocation(this)
         }
 
@@ -304,8 +306,9 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
             Status.NO_DATA_FOUND -> {
                 infoTextView.visibility = View.VISIBLE
                 noInternetTexView.visibility = View.GONE
-                infoTextView.text = this.getString(R.string.no_meal)
+                infoTextView.text = this.getString(R.string.no_canteens_around_location)
                 progressBar.visibility = View.GONE
+                swiperefresh.isRefreshing = false
 
             }
 

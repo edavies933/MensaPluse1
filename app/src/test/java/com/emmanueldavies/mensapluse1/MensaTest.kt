@@ -1,7 +1,7 @@
 package com.emmanueldavies.mensapluse1
 
 import com.emmanueldavies.mensapluse1.data.Prices
-import com.emmanueldavies.mensapluse1.rooom.DateTypeConverter
+import com.emmanueldavies.mensapluse1.data.rooom.DateTypeConverter
 import org.junit.Assert
 import org.junit.Test
 

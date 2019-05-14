@@ -1,9 +1,9 @@
-package com.emmanueldavies.mensapluse1.ui
+package com.emmanueldavies.mensapluse1.presentation.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
-import com.emmanueldavies.mensapluse1.ui.MensaView.MainActivity
+import com.emmanueldavies.mensapluse1.presentation.ui.MensaView.MainActivity
 
 
 class SplashActivity : AppCompatActivity() {
