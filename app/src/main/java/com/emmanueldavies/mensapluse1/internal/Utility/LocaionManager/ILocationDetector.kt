@@ -1,8 +1,8 @@
-package com.emmanueldavies.mensapluse1.LocaionManager
+package com.emmanueldavies.mensapluse1.internal.Utility.LocaionManager
 
 import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
-import com.emmanueldavies.mensapluse1.data.LocationData
+import com.emmanueldavies.mensapluse1.domain.model.LocationData
 
 interface ILocationDetector {
 

@@ -1,7 +1,7 @@
 package com.emmanueldavies.mensapluse1.data.rooom
 
 import android.arch.persistence.room.TypeConverter
-import com.emmanueldavies.mensapluse1.data.Prices
+import com.emmanueldavies.mensapluse1.domain.model.Prices
 
 class DateTypeConverter {
     companion object {
@@ -40,7 +40,11 @@ class DateTypeConverter {
 
             var splitedList = valueList.split("€,")
 
-            return Prices(splitedList[0], splitedList[1], others = splitedList[2].replace("€", ""))
+            return Prices(
+                splitedList[0],
+                splitedList[1],
+                others = splitedList[2].replace("€", "")
+            )
         }
 
         @TypeConverter

@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.di
+package com.emmanueldavies.mensapluse1.internal.di.component
 
 import android.app.Activity
 import android.app.Application
@@ -16,7 +16,7 @@ class MensaApplication : Application(), HasActivityInjector {
 
     override fun onCreate() {
         super.onCreate()
-       AppInjector.init(this)
+        AppInjector.init(this)
 //        DaggerAppComponent.builder().application(this).build().inject(this)
 
     }

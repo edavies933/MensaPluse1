@@ -1,9 +1,9 @@
-package com.emmanueldavies.mensapluse1.di.modules
+package com.emmanueldavies.mensapluse1.internal.di.modules
 
 
 import android.app.Application
 import android.arch.persistence.room.Room
-import com.emmanueldavies.mensapluse1.api.MensaAPIInterface
+import com.emmanueldavies.mensapluse1.data.resipotory.api.MensaAPIInterface
 import com.emmanueldavies.mensapluse1.data.resipotory.IRemoteDataSource
 import com.emmanueldavies.mensapluse1.data.resipotory.IRepository
 import com.emmanueldavies.mensapluse1.data.rooom.CanteenDao

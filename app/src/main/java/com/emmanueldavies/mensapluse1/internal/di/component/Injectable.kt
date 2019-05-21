@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.di
+package com.emmanueldavies.mensapluse1.internal.di.component
 
 
 /**

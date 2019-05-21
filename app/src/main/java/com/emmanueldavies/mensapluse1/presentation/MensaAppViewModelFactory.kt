@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.Utility
+package com.emmanueldavies.mensapluse1.presentation
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider

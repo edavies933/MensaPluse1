@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.data
+package com.emmanueldavies.mensapluse1.domain.model
 import android.arch.persistence.room.*
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

@@ -17,8 +17,8 @@
 
 package com.emmanueldavies.mensapluse1.domain.interactor
 
-import com.emmanueldavies.mensapluse1.data.Canteen
-import com.emmanueldavies.mensapluse1.data.LocationData
+import com.emmanueldavies.mensapluse1.domain.model.Canteen
+import com.emmanueldavies.mensapluse1.domain.model.LocationData
 import com.emmanueldavies.mensapluse1.data.resipotory.IRepository
 import com.emmanueldavies.mensapluse1.domain.interactor.base.SingleUseCase
 import com.usecase.reactiveusecasessample.domain.executor.PostExecutionThread

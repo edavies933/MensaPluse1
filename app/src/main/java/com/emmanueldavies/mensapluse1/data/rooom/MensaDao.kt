@@ -1,7 +1,7 @@
 package com.emmanueldavies.mensapluse1.data.rooom
 
 import android.arch.persistence.room.*
-import com.emmanueldavies.mensapluse1.data.Meal
+import com.emmanueldavies.mensapluse1.domain.model.Meal
 import io.reactivex.Maybe
 
 @Dao

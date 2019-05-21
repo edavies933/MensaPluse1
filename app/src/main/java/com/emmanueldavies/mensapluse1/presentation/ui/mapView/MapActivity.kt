@@ -6,8 +6,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
-import com.emmanueldavies.mensapluse1.Utility.MensaAppViewModelFactory
+import com.emmanueldavies.mensapluse1.internal.Utility.LocaionManager.ILocationDetector
+import com.emmanueldavies.mensapluse1.presentation.MensaAppViewModelFactory
 import com.emmanueldavies.mensapluse1.R
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap

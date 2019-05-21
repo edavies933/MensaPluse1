@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.di.modules
+package com.emmanueldavies.mensapluse1.internal.di.modules
 
 import android.arch.lifecycle.ViewModel
 import dagger.MapKey

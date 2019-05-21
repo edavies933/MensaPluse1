@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.Utility
+package com.emmanueldavies.mensapluse1.internal.Utility
 
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

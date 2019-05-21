@@ -1,12 +1,12 @@
-package com.emmanueldavies.mensapluse1.Utility
+package com.emmanueldavies.mensapluse1.presentation
 
 import android.arch.lifecycle.MutableLiveData
 import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.emmanueldavies.mensapluse1.data.Canteen
-import com.emmanueldavies.mensapluse1.data.Meal
+import com.emmanueldavies.mensapluse1.domain.model.Canteen
+import com.emmanueldavies.mensapluse1.domain.model.Meal
 import com.emmanueldavies.mensapluse1.databinding.RecyclerViewItemBinding
 import com.emmanueldavies.mensapluse1.databinding.SpinnerItemBinding
 import java.util.*

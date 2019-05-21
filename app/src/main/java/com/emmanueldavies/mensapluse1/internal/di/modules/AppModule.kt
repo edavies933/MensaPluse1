@@ -1,13 +1,13 @@
-package com.emmanueldavies.mensapluse1.di.modules
+package com.emmanueldavies.mensapluse1.internal.di.modules
 
 import android.app.Application
-import com.emmanueldavies.mensapluse1.LocaionManager.ILocationDetector
-import com.emmanueldavies.mensapluse1.LocaionManager.LocationDetector
-import com.emmanueldavies.mensapluse1.Utility.CityNameGeoCoder
-import com.emmanueldavies.mensapluse1.Utility.ICityNameGeoCoder
-import com.emmanueldavies.mensapluse1.Utility.INetworkManager
-import com.emmanueldavies.mensapluse1.Utility.NetWorkManagerImpl
-import com.emmanueldavies.mensapluse1.api.MensaAPIInterface
+import com.emmanueldavies.mensapluse1.internal.Utility.LocaionManager.ILocationDetector
+import com.emmanueldavies.mensapluse1.internal.Utility.LocaionManager.LocationDetector
+import com.emmanueldavies.mensapluse1.internal.Utility.CityNameGeoCoder
+import com.emmanueldavies.mensapluse1.internal.Utility.ICityNameGeoCoder
+import com.emmanueldavies.mensapluse1.internal.Utility.INetworkManager
+import com.emmanueldavies.mensapluse1.internal.Utility.NetWorkManagerImpl
+import com.emmanueldavies.mensapluse1.data.resipotory.api.MensaAPIInterface
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

@@ -3,10 +3,10 @@ package com.emmanueldavies.mensapluse1.presentation.ui.mapView
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import com.emmanueldavies.mensapluse1.Utility.ICityNameGeoCoder
-import com.emmanueldavies.mensapluse1.Utility.INetworkManager
-import com.emmanueldavies.mensapluse1.data.Canteen
-import com.emmanueldavies.mensapluse1.data.LocationData
+import com.emmanueldavies.mensapluse1.internal.Utility.ICityNameGeoCoder
+import com.emmanueldavies.mensapluse1.internal.Utility.INetworkManager
+import com.emmanueldavies.mensapluse1.domain.model.Canteen
+import com.emmanueldavies.mensapluse1.domain.model.LocationData
 import com.emmanueldavies.mensapluse1.domain.interactor.LoadCanteenUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -20,7 +20,7 @@ class MapViewModel  @Inject constructor(
     private var geoCoder: ICityNameGeoCoder,
     private var netWorkManager: INetworkManager,
     private var loadCanteenUseCase: LoadCanteenUseCase,
-application: Application
+    application: Application
 
 ) :
     AndroidViewModel(application) {

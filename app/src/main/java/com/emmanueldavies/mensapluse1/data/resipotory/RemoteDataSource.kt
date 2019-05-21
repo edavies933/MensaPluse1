@@ -1,9 +1,9 @@
 package com.emmanueldavies.newMensaplus.resipotory
 
-import com.emmanueldavies.mensapluse1.api.MensaAPIInterface
-import com.emmanueldavies.mensapluse1.data.Canteen
-import com.emmanueldavies.mensapluse1.data.LocationData
-import com.emmanueldavies.mensapluse1.data.Meal
+import com.emmanueldavies.mensapluse1.data.resipotory.api.MensaAPIInterface
+import com.emmanueldavies.mensapluse1.domain.model.Canteen
+import com.emmanueldavies.mensapluse1.domain.model.LocationData
+import com.emmanueldavies.mensapluse1.domain.model.Meal
 import com.emmanueldavies.mensapluse1.data.resipotory.IRemoteDataSource
 import io.reactivex.Maybe
 import io.reactivex.schedulers.Schedulers

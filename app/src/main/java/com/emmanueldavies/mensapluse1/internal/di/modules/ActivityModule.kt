@@ -1,6 +1,5 @@
-package com.emmanueldavies.mensapluse1.di.modules
+package com.emmanueldavies.mensapluse1.internal.di.modules
 
-import com.emmanueldavies.mensapluse1.di.FragmentBuildersModule
 import com.emmanueldavies.mensapluse1.presentation.ui.aboutView.AboutActivity
 import com.emmanueldavies.mensapluse1.presentation.ui.MensaView.MainActivity
 import com.emmanueldavies.mensapluse1.presentation.ui.SplashActivity

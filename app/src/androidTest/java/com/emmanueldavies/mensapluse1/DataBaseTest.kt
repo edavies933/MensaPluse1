@@ -2,9 +2,9 @@ package com.emmanueldavies.mensapluse1
 
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
-import com.emmanueldavies.mensapluse1.data.Canteen
-import com.emmanueldavies.mensapluse1.data.Meal
-import com.emmanueldavies.mensapluse1.data.Prices
+import com.emmanueldavies.mensapluse1.domain.model.Canteen
+import com.emmanueldavies.mensapluse1.domain.model.Meal
+import com.emmanueldavies.mensapluse1.domain.model.Prices
 import com.emmanueldavies.mensapluse1.data.rooom.MensaDatabase
 import io.reactivex.internal.operators.maybe.MaybeObserveOn
 import org.junit.After

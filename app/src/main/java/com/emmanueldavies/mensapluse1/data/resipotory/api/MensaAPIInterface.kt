@@ -1,7 +1,7 @@
-package com.emmanueldavies.mensapluse1.api
+package com.emmanueldavies.mensapluse1.data.resipotory.api
 
-import com.emmanueldavies.mensapluse1.data.Canteen
-import com.emmanueldavies.mensapluse1.data.Meal
+import com.emmanueldavies.mensapluse1.domain.model.Canteen
+import com.emmanueldavies.mensapluse1.domain.model.Meal
 import io.reactivex.Maybe
 import retrofit2.http.GET
 import retrofit2.http.Path

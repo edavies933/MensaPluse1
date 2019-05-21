@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.data
+package com.emmanueldavies.mensapluse1.domain.model
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore

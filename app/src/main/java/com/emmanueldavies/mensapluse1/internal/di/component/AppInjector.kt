@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.di
+package com.emmanueldavies.mensapluse1.internal.di.component
 
 
 import android.support.v4.app.FragmentActivity
@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
-import com.emmanueldavies.mensapluse1.di.component.DaggerAppComponent
 import dagger.android.support.AndroidSupportInjection
 
 /**

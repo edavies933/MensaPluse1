@@ -1,8 +1,8 @@
-package com.emmanueldavies.mensapluse1.di.modules
+package com.emmanueldavies.mensapluse1.internal.di.modules
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.emmanueldavies.mensapluse1.Utility.MensaAppViewModelFactory
+import com.emmanueldavies.mensapluse1.presentation.MensaAppViewModelFactory
 import com.emmanueldavies.mensapluse1.presentation.ui.MensaViewModel
 import com.emmanueldavies.mensapluse1.presentation.ui.mapView.MapViewModel
 import dagger.Binds

@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.Utility
+package com.emmanueldavies.mensapluse1.internal.Utility
 
 import android.app.Application
 import android.location.Geocoder

@@ -40,13 +40,26 @@ ext {
     rxAndroidVersion = "2.0.2"
     rxJava2Version = "2.1.0"
     gsonCoverterVersion = "2.8.2"
-
+    gsonCoverterVersion = "2.8.2"
+    androidJunitTestVersion = "1.1.1"
     //test
     junitVersion = "4.12"
 
     //testImpl
     testRunnerVersion = "1.0.1"
-    testEspressoVersion = "3.0.1"
+    testEspressoVersion = "3.0.2"
+
+    //google play
+    googlePlayVersion = "15.0.1"
+
+    //rx kotlin version
+    rxKotlinVersion = "2.1.1"
+
+    //room version
+    roomVersion = "1.0.0"
+
+    //navigation
+    androidNavigationVersion = "2.0.0"
 }
 
 

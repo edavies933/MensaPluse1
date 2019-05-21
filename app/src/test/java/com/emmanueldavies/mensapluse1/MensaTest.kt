@@ -1,6 +1,6 @@
 package com.emmanueldavies.mensapluse1
 
-import com.emmanueldavies.mensapluse1.data.Prices
+import com.emmanueldavies.mensapluse1.domain.model.Prices
 import com.emmanueldavies.mensapluse1.data.rooom.DateTypeConverter
 import org.junit.Assert
 import org.junit.Test
@@ -44,7 +44,7 @@ class MensaTest {
     @Test
     fun testPricesToStringConverter_ShouldCovertPriceObjectToASingleString(){
 
-        var prices = Prices("2.22","3.33", others = "4.44")
+        var prices = Prices("2.22", "3.33", others = "4.44")
         var convertedPrices =  DateTypeConverter.pricesToStringConverter(prices)
 
         Assert.assertEquals("Student: 2.22€, Employee: 3.33€, Others: 4.44€", convertedPrices)

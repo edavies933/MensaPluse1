@@ -1,4 +1,4 @@
-package com.emmanueldavies.mensapluse1.LocaionManager
+package com.emmanueldavies.mensapluse1.internal.Utility.LocaionManager
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -10,7 +10,7 @@ import android.support.v4.app.ActivityCompat
 import android.util.Log
 import android.view.View
 import com.emmanueldavies.mensapluse1.R
-import com.emmanueldavies.mensapluse1.data.LocationData
+import com.emmanueldavies.mensapluse1.domain.model.LocationData
 import com.emmanueldavies.mensapluse1.presentation.ui.MensaView.MainActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
@@ -29,7 +29,12 @@ class LocationDetector @Inject constructor() : ILocationDetector, GoogleApiClien
 
     override fun onLocationChanged(location: Location) {
 
-        locationLifeData.postValue(LocationData(location.latitude, location.longitude))
+        locationLifeData.postValue(
+            LocationData(
+                location.latitude,
+                location.longitude
+            )
+        )
         stopListeningToLocationUpdate()
 
     }
@@ -111,7 +116,10 @@ class LocationDetector @Inject constructor() : ILocationDetector, GoogleApiClien
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful && task.result != null) {
 
-                    var locationData = LocationData(task.result.latitude, task.result.longitude)
+                    var locationData = LocationData(
+                        task.result.latitude,
+                        task.result.longitude
+                    )
                     task.result.latitude
 
                     locationLifeData.postValue(locationData)

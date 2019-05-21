@@ -15,7 +15,7 @@
  *
  */
 
-package com.emmanueldavies.mensapluse1.di.modules
+package com.emmanueldavies.mensapluse1.internal.di.modules
 
 import com.emmanueldavies.mensapluse1.presentation.UIThread
 import com.usecase.reactiveusecasessample.data.executor.JobExecutor
