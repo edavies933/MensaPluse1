@@ -17,7 +17,7 @@
 
 package com.emmanueldavies.mensapluse1.internal.di.modules
 
-import com.emmanueldavies.mensapluse1.presentation.UIThread
+import com.emmanueldavies.mensapluse1.domain.executor.UIThread
 import com.usecase.reactiveusecasessample.data.executor.JobExecutor
 import com.usecase.reactiveusecasessample.domain.executor.PostExecutionThread
 import com.usecase.reactiveusecasessample.domain.executor.ThreadExecutor

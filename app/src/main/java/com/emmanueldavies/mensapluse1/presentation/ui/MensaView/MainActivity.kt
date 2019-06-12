@@ -1,19 +1,15 @@
 package com.emmanueldavies.mensapluse1.presentation.ui.MensaView
 
-import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.support.design.widget.BaseTransientBottomBar.LENGTH_INDEFINITE
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -22,16 +18,10 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.view.animation.LayoutAnimationController
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
-import android.widget.ArrayAdapter
-import android.widget.TextView
 import com.emmanueldavies.mensapluse1.BuildConfig
 import com.emmanueldavies.mensapluse1.internal.Utility.LocaionManager.ILocationDetector
 import com.emmanueldavies.mensapluse1.presentation.MensaAppViewModelFactory
@@ -45,7 +35,6 @@ import dagger.android.support.HasSupportFragmentInjector
 import io.spacenoodles.makingyourappreactive.viewModel.state.Status
 import io.spacenoodles.makingyourappreactive.viewModel.state.ViewState
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_menu_list.*
 import javax.inject.Inject
 open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     MenuListFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
@@ -168,14 +157,6 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
 
 
 
-    fun  runAnimations (){
-
-        var context = recyclerView.context
-      var  controller : LayoutAnimationController = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fall_down)
-
-        recyclerView.adapter?.notifyDataSetChanged()
-        recyclerView.scheduleLayoutAnimation()
-    }
     override fun supportFragmentInjector() = dispatchingAndroidInjector
 
     private fun setupViewPager(viewPager: ViewPager) {
@@ -320,31 +301,7 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
     }
 
 
-    class ViewSnap @Inject constructor() {
-        lateinit var snackBar: Snackbar
 
-        fun showSnackBar(
-            activity: Activity,
-            snackStrId: Int,
-            actionStrId: Int = 0,
-            listener: View.OnClickListener? = null
-        ) {
-
-
-            snackBar = Snackbar.make(
-                activity.findViewById(android.R.id.content), activity.getString(snackStrId),
-                LENGTH_INDEFINITE
-            )
-            if (actionStrId != 0 && listener != null) {
-                snackBar.setAction(activity.getString(actionStrId), listener)
-            } else {
-
-                snackBar.setAction(activity.getString(R.string.snackbar_ok_button)) { snackBar.dismiss() }
-            }
-            snackBar.show()
-        }
-
-    }
 
 
     /**
@@ -387,53 +344,13 @@ open class MainActivity : AppCompatActivity(), HasSupportFragmentInjector,
                             startActivity(intent)
                         })
                 }
-                // Notify the user via a SnackBar that they have rejected a core permission for the
-                // app, which makes the Activity useless. In a real app, core permissions would
-                // typically be best requested during a welcome-screen flow.
-
-                // Additionally, it is important to remember that a permission might have been
-                // rejected without asking the user for permission (device policy or "Never ask
-                // again" prompts). Therefore, a user interface affordance is typically implemented
-                // when permissions are denied. Otherwise, your app could appear unresponsive to
-                // touches or interactions which have required permissions.
 
             }
         }
     }
 
 
-}
-
-
-class CustomSpinnerAdapter : ArrayAdapter<String> {
-    private var CustomSpinnerItems: List<String>
-
-    constructor(context: Context, resource: Int, pickerItems: List<String>) : super(
-        context,
-        resource,
-        pickerItems
-    ) {
-        this.CustomSpinnerItems = pickerItems
-    }
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        return CustomSpinnerView(position, parent)
-    }
-
-    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-        return CustomSpinnerView(position, parent)
-    }
-
-    private fun CustomSpinnerView(position: Int, parent: ViewGroup): View {
-        //Getting the Layout Inflater Service from the system
-        val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        //Inflating out custom spinner viewz
-        val customView = layoutInflater.inflate(R.layout.spinner_item, parent, false)
-        //Declaring and initializing the widgets in custom layout
-        val textView = customView?.findViewById(R.id.spinner_canteen_name) as? TextView
-        textView?.text = CustomSpinnerItems[position]
-        return customView
-    }
-
 
 }
+
+

@@ -17,12 +17,12 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import javax.inject.Singleton
 
-@Module(includes = [ViewModelModule::class])
+@Module
 class AppModule {
 
     @Singleton
     @Provides
-    fun provideGithubService(okHttpClient: OkHttpClient): MensaAPIInterface {
+    fun provideMensaApiService(okHttpClient: OkHttpClient): MensaAPIInterface {
         return Retrofit.Builder()
             .baseUrl("https://openmensa.org/api/v2/")
             .client(okHttpClient)

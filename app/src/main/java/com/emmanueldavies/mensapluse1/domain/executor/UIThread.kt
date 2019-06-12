@@ -18,7 +18,7 @@
  * Copied from https://github.com/android10/Android-CleanArchitecture and converted to Kotlin.
  */
 
-package com.emmanueldavies.mensapluse1.presentation
+package com.emmanueldavies.mensapluse1.domain.executor
 
 import com.usecase.reactiveusecasessample.domain.executor.PostExecutionThread
 import io.reactivex.Scheduler
