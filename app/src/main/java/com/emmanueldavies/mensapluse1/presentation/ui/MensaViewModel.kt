@@ -178,7 +178,7 @@ class MensaViewModel  @Inject constructor(
 
             if (!hasInternet) {
                 state.postValue(ViewState.noInternet())
-            } else
+            } else 
 
             {
                 state.postValue(ViewState.noDataFound())
